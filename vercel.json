@@ -8,9 +8,7 @@
   ],
   "routes": [
     {
-      "src": ["/controller/(.*)", "/middlewares/(.*)", 
-      "/models/(.*)", "/routes/(.*)", "/services/(.*)",
-       "/utils/(.*)","/index.js","app.js"],
+      "src": ["/(.*)"],
       "dest": "/",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     }

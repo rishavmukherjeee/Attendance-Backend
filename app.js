@@ -7,9 +7,9 @@ app.use(cors());
 app.use(express.json());
 
 // Router
-app.use("/v1/teacher", require("./routes/teacher.routes"));
-app.use("/v1/student", require("./routes/student.routes"));
-app.use("/v1/admin", require("./routes/admin.routes"));
+app.use("/v1/teacher", require("./src/routes/teacher.routes"));
+app.use("/v1/student", require("./src/routes/student.routes"));
+app.use("/v1/admin", require("./src/routes/admin.routes"));
 
 app.get("/", async (req, res) => {
   res.send("Server is running");
