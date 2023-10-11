@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": ["/controller/(.*)", "/middlewares/(.*)", 
+      "/models/(.*)", "/routes/(.*)", "/services/(.*)",
+       "/utils/(.*)","/index.js","app.js"],
+      "dest": "/",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+    }
+  ]
+}
