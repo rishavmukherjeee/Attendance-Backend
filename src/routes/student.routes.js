@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {showAll} = require('../controllers/student/show');
+const { showAllIds } = require('../controllers/teacher/allSubject');
 //const teacherController = require('../controllers/teacher.controller');
 
 router.post('/', (req, res) => {
@@ -15,5 +16,7 @@ router.post('/:id', (req, res) => {
     res.send('Student Route',id);
   });
   */
+ 
+router.post('/allSubjects',showAllIds)
 router.post('/showAll',showAll)
 module.exports = router;
