@@ -14,6 +14,7 @@ const express = require('express');
 const router = express.Router();
 //const teacherController = require('../controllers/teacher.controller');
 const attendanceController = require('../controllers/teacher/attendance');
+const { showAll } = require('../controllers/teacher/show');
 router.post('/', (req, res) => {
   console.log('Reached teacher route'); 
   res.status(200).send('Teacher Route');
@@ -26,5 +27,5 @@ router.post('/:id', (req, res) => {
 });
 */
 router.post('/newAttendance', attendanceController.updateAttendance);
-  
+router.post('/showAll',showAll)
 module.exports = router;
