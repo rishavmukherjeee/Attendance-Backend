@@ -10,7 +10,7 @@ try {
     const subjects = await subjectModel.find({} ); 
     const ids = subjects.map(subject => ({code:subject._id, name:subject.subject}));
     
-    res.status(200).json({ ...ids });
+    res.status(200).json({ids });
 } catch (error) {
     res.status(500).json({ message: error.message });
   }
