@@ -23,4 +23,6 @@ const showAll = async (req, res) => {
   }
 };
 
-module.exports = { showAll };
+
+
+module.exports = { showAll};
