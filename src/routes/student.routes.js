@@ -17,6 +17,7 @@ router.post('/:id', (req, res) => {
   });
   */
  
-router.post('/allSubjects',showAllIds)
-router.post('/showAll',showAll)
+router.post('/allSubjects', showAllIds)
+router.post('/showAll', showAll)
+
 module.exports = router;

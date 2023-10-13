@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const {createSubject,getAllSubjects} = require('../controllers/admin/createSubject');
-
 const {showAll} = require('../controllers/student/show');
-router.post('/', (req, res) => {
-    
+const { upload } = require('../middlewares/multer.middleware');
+const { importStudents } = require('../controllers/admin/createUser');
+
+router.post('/', (req, res) => {    
   console.log('Reached admin route'); 
   res.status(200).send('Admin Route');
 });
@@ -19,4 +20,6 @@ router.post('/:id', (req, res) => {
 });
   */
 router.post('/showAll',showAll)
+router.post('/importStudents', upload.single('file'), importStudents)
+
 module.exports = router;
