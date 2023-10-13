@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, 'public')));
 
+app.use("/v1",require("./src/middlewares/login"))
 // Router
 app.use("/v1/teacher", require("./src/routes/teacher.routes"));
 app.use("/v1/student", require("./src/routes/student.routes"));
