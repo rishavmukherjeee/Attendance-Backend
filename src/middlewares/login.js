@@ -36,4 +36,20 @@ router.post('/', (req, res) => {
     });
 });
 
+router.post('/data',(req,res)=>{
+    const{ email}=req.body;
+    
+   const studentCollection =db.collection('stu.it.5.as');
+   const teacherCollection =db.collection('it.teachers');
+   
+   studentCollection.findOne({email: email}, (err, student) => {
+    if(err) throw err;
+    if(student) res.status(200).json({name:student.firstname+" "+student.lastname})
+    else res.status(400)})
+
+    teacherCollection.findOne({email: email}, (err, teacher) => {
+        if(err) throw err;
+        if(teacher) res.status(200).json({name:teacher.firstname+" "+teacher.lastname})
+        else res.status(400)})
+})
 module.exports = router;
