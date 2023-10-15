@@ -36,4 +36,21 @@ router.post('/receive', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.post('/delete', async (req, res) => {
+  const { messageId } = req.body;
+
+  try {
+    const deletedMessage = await messageModel.findOneAndDelete({ _id: messageId });
+    
+    if (deletedMessage) {
+      res.status(200).json({ message: 'Message deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Message not found or status is not 0' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 module.exports=router;
