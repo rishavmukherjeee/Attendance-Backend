@@ -17,11 +17,11 @@ const studentCollection = new mongoose.Schema(
     password: {
       type: String,
     },
-    roll:{
-      type:Number
+    role:{
+        type:String,
     },
-    weeklyremark:{
-      type:[String]
+    assignedsub:{
+        type:[String],
     }
   },
 );

@@ -6,7 +6,8 @@ const subjectSchema = new mongoose.Schema({
     subject: String,
     date: [Number],
     attendance: [Buffer],
-    roll: [Number]
+    roll: [Number],
+    subtype: String,
   
 });
 
