@@ -4,14 +4,11 @@ const mongoose = require('mongoose')
 const studentCollection = require('../../models/student')
 
 exports.importStudents = async (req, res) => {
-    // const {} = req.body
-
-    try {
-        const filePath = __dirname + '\\..\\..\\..\\public\\uploads\\test.xlsx';
-        let wb = xlsx.readFile(filePath)
-        let excelData = wb.Sheets['ALL NEW USER']
+    const { collectionName } = req.body
+    try {        
+        let wb = xlsx.readFile(req.file.path)
+        let excelData = wb.Sheets['Sheet1']
         let ans = xlsx.utils.sheet_to_json(excelData)
-        console.log(ans)
 
         let userDate = ans.map((obj, i) => {
             return {
@@ -23,12 +20,12 @@ exports.importStudents = async (req, res) => {
             }
         })
 
-        const studentModel = mongoose.model('stu-it-5-aaas', studentCollection)
+        const studentModel = mongoose.model(collectionName, studentCollection)
 
         const result = await studentModel.insertMany(userDate)
 
-        console.log(result)
-        fs.unlinkSync(filePath);
+        fs.unlinkSync(req.file.path);
+
         res.status(200).json({success: true, msg: 'Excel file imported'})
     } catch (error) {
         console.log(error)
