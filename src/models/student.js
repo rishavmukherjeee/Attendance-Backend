@@ -24,6 +24,7 @@ const studentCollection = new mongoose.Schema(
       type:[String]
     }
   },
+  
 );
 
 module.exports = studentCollection;

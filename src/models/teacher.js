@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const studentCollection = new mongoose.Schema(
+const teacherCollection = new mongoose.Schema(
   {
     _id: {
       type: String,
@@ -17,13 +17,10 @@ const studentCollection = new mongoose.Schema(
     password: {
       type: String,
     },
-    role:{
-        type:String,
-    },
-    assignedsub:{
-        type:[String],
+    designation:{
+        type: String
     }
   },
 );
 
-module.exports = studentCollection;
+module.exports = teacherCollection;
