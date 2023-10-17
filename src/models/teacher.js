@@ -19,6 +19,9 @@ const teacherCollection = new mongoose.Schema(
     },
     designation:{
         type: String
+    },
+    assignedSub:{
+      type:[String]
     }
   },
 );
