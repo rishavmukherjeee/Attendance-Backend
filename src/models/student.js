@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const studentCollection = new mongoose.Schema(
   {
     _id: {
-      type: String,
+      type: Number,
     },
     firstname: {
       type: String,
@@ -17,8 +17,8 @@ const studentCollection = new mongoose.Schema(
     password: {
       type: String,
     },
-    roll:{
-      type:Number
+    stream:{
+      type:String,
     },
     weeklyremark:{
       type:[String]

@@ -1,0 +1,23 @@
+POST http://192.168.203.100:3000/v1/teacher/data HTTP/1.1
+content-type: application/json
+
+{
+    "email":"teacher1@gmail.com",
+    "stream":"it.teachers"
+}
+###
+GET {{$dotenv IP}} HTTP/1.1
+content-type: application/json
+
+{
+    
+}
+###
+
+POST {{$dotenv IP}}/v1/student/data HTTP/1.1
+content-type: application/json
+
+{
+    "email":"student1@gmail.com",
+    "stream":"stu.it.5.as"
+}

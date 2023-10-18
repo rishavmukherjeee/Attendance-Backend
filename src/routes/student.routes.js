@@ -3,7 +3,7 @@ const router = express.Router();
 const {showAll} = require('../controllers/student/show');
 const { showAllIds } = require('../controllers/teacher/allSubject');
 //const teacherController = require('../controllers/teacher.controller');
-
+const {data}= require('../controllers/student/data')
 router.post('/', (req, res) => {
     
   console.log('Reached Student route'); 
@@ -16,7 +16,7 @@ router.post('/:id', (req, res) => {
     res.send('Student Route',id);
   });
   */
- 
+router.post('/data',data )
 router.post('/allSubjects', showAllIds)
 router.post('/showAll', showAll)
 

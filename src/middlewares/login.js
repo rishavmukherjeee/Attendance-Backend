@@ -5,9 +5,13 @@ const mongoose = require('mongoose')
 const db = mongoose.connection;
 
 router.post('/', (req, res) => {
-   const {email, password}=req.body;
-   const studentCollection =db.collection('stu.it.5.as');
+   const {email, password, teacherStream , studentStream}=req.body;
+   /*const studentCollection =db.collection('stu.it.5.as');
    const teacherCollection =db.collection('it.teachers');
+   */
+  
+   const studentCollection =db.collection(studentStream);
+   const teacherCollection =db.collection(teacherStream);
    
    studentCollection.findOne({email: email}, (err, student) => {
         if(err) throw err;
