@@ -4,6 +4,8 @@ const {createSubject,getAllSubjects} = require('../controllers/admin/createSubje
 const {showAll} = require('../controllers/student/show');
 const { upload } = require('../middlewares/multer.middleware');
 const { importStudents } = require('../controllers/admin/createUser');
+const { onLogin, onRegister, getUser, onLogout } = require('../controllers/admin/admin.controller');
+const { validateUser } = require('../middlewares/auth.milddleware');
 
 router.post('/', (req, res) => {    
   console.log('Reached admin route'); 
@@ -21,5 +23,9 @@ router.post('/:id', (req, res) => {
   */
 router.post('/showAll',showAll)
 router.post('/importStudents', upload.single('file'), importStudents)
+router.post('/register', onRegister);
+router.post('/login', onLogin);
+router.get('/me', validateUser, getUser);
+router.get('/logout', onLogout);
 
 module.exports = router;
