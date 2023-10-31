@@ -4,7 +4,6 @@ exports.validateUser = async (req, res, next) => {
     try {
         const cookie = req?.headers?.cookie;
         const token = cookie?.split('=')[1];
-        console.log(token);    
         if(!token) {
             return res.status(403).json({
                 success: false,
@@ -19,5 +18,21 @@ exports.validateUser = async (req, res, next) => {
             success: false,
             message: "Something wents wrong"
         })
+    }
+}
+
+exports.authorizedRoles = (...roles) => async function (req, res, next) {
+    try {
+        const { role } = req?.user;
+        // console.log(role);
+        if(!roles.includes(role)) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized to access this routes"
+            });
+        }
+        next();
+    } catch (error) {
+        
     }
 }

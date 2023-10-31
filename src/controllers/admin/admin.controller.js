@@ -91,9 +91,12 @@ exports.onLogin = async (req, res) => {
             expires: new Date(Date.now() + 24*3600*1000)
         })
 
+        admin.password = undefined
+
         res.status(200).json({
             success:true,
-            message: "Admin user login successful"
+            message: "Admin user login successful",
+            data: admin
         })            
     } catch (error) {
         // console.log(error)
