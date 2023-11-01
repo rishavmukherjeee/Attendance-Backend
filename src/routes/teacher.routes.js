@@ -18,7 +18,7 @@ const { showAll } = require('../controllers/teacher/show');
 const { showAllIds } = require('../controllers/teacher/allSubject');
 const {data}  = require('../controllers/teacher/data');
 const { validateUser, authorizedRoles } = require('../middlewares/auth.milddleware');
-const { getAllTeachers } = require('../controllers/teacher/teacher.controller');
+const { getAllTeachers, onRegister } = require('../controllers/teacher/teacher.controller.js');
 router.post('/', (req, res) => {
   console.log('Reached teacher route'); 
   res.status(200).send('Teacher Route');
@@ -35,5 +35,8 @@ router.post('/data',data)
 router.post('/newAttendance', attendanceController.updateAttendance);
 router.post('/showAll',showAll)
 router.get('/all', validateUser, authorizedRoles("SUPER-ADMIN", "ADMIN"), getAllTeachers)
+router.post('/register', onRegister)
+// router.get('/login', onLogin)
+// router.get('/me', validateUser, getUser)
 
 module.exports = router;
