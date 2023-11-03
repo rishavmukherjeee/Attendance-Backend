@@ -5,41 +5,30 @@ const mongoose = require('mongoose')
 const db = mongoose.connection;
 
 router.post('/', (req, res) => {
-   const {email, password, teacherStream , studentStream}=req.body;
+   const {email, password,stream }=req.body;
    /*const studentCollection =db.collection('stu.it.5.as');
    const teacherCollection =db.collection('it.teachers');
    */
   
-   const studentCollection =db.collection(studentStream);
-   const teacherCollection =db.collection(teacherStream);
+   const Collection =db.collection(stream);
    
-   studentCollection.findOne({email: email}, (err, student) => {
+   Collection.findOne({email: email}, (err, found) => {
         if(err) throw err;
-        if(student){
+        if(found){
             // Compare password
-            if(password === student.password) {
-                res.status(200).json("student");
+            if(password === found.password) {
+                res.status(200).json("Yes");
             } else {
-                res.status(401).json("Invalid password");
-            }
-        } else {
-            teacherCollection.findOne({email: email}, (err, teacher) => {
-                if(err) throw err;
-                if(teacher){
-                    // Compare password
-                    if(password === teacher.password) {
-                        res.status(200).json("teacher");
-                    } else {
-                        res.status(401).json("Invalid password");
-                    }
-                } else{
+                res.status(401).json("Invalid Password");
+            }}
+         else{
                     res.status(404).json("User not found");
-                }
-            });
+            
         }
-    });
+    }
+    )
 });
-
+//Hardddddcodeddddd
 router.post('/data',(req,res)=>{
     const{ email}=req.body;
     

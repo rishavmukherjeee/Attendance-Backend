@@ -6,7 +6,7 @@ content-type: application/json
     "stream":"it.teachers"
 }
 ###
-GET {{$dotenv IP}} HTTP/1.1
+GET http://localhost:3000 HTTP/1.1
 content-type: application/json
 
 {
@@ -36,4 +36,13 @@ content-type: application/json
 
 {
     "email":"debjit"
+}
+###
+POST http://localhost:3000/v1 HTTP/1.1
+content-type: application/json
+
+{
+    "email":"teache1@gmail.com",
+    "password":"teach123",
+    "stream":"it.teachers"
 }
