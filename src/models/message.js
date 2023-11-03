@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 
 const messageSchema= new mongoose.Schema(
   {
-    _id: {
-      type: String,
-    },
+    
     emailfrom: {
       type: String,
     },

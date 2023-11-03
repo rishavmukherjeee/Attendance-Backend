@@ -21,3 +21,19 @@ content-type: application/json
     "email":"student1@gmail.com",
     "stream":"stu.it.5.as"
 }
+###
+POST http://localhost:3000/v1/message/send HTTP/1.1
+content-type: application/json
+
+{
+    "emailto":"debjit",
+    "emailfrom":"someone",
+    "message":"hello"
+}
+###
+POST http://localhost:3000/v1/message/receive HTTP/1.1
+content-type: application/json
+
+{
+    "email":"debjit"
+}
