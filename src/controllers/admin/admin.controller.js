@@ -89,7 +89,7 @@ exports.onLogin = async (req, res) => {
             path: "/",
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
             httpOnly: true,
-            sameSite: "lax",
+            sameSite: "none",
             secure: true,
         })
 
@@ -139,7 +139,7 @@ exports.onLogout = async (req, res) => {
             path: '/',
             httpOnly: true,
             expires: 0,            
-            sameSite: "lax",
+            sameSite: "none",
             secure: true,
         });
         
