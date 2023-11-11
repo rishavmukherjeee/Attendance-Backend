@@ -8,7 +8,7 @@ const path = require('path');
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://samss.netlify.app/'
+    'https://samss.netlify.app'
   ],
   credentials: true,  
   allowedHeaders: ["Content-Type", "Authorization"],
