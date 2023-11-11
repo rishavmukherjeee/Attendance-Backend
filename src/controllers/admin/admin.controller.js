@@ -86,10 +86,10 @@ exports.onLogin = async (req, res) => {
         });
 
         res.cookie("token", token, {
+            path: "/",
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
             httpOnly: true,
-            path: '/',
-            expires: new Date(Date.now() + 24*3600*1000),            
-            // sameSite: "lax",
+            sameSite: "lax",
             secure: true,
         })
 
@@ -139,7 +139,7 @@ exports.onLogout = async (req, res) => {
             path: '/',
             httpOnly: true,
             expires: 0,            
-            // sameSite: "lax",
+            sameSite: "lax",
             secure: true,
         });
         
