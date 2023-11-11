@@ -10,7 +10,10 @@ exports.validateUser = async (req, res, next) => {
                 message: "Unauthenticated please log in"
             });
         }
-        req.user = await jwt.verify(token, process.env.JWT_SECRET); 
+        const decode = jwt.verify(token, process.env.JWT_SECRET); 
+
+        req.user = { id: decode.id, role: decode.role };
+        
         next()
     } catch (error) {
         // console.log(error)
