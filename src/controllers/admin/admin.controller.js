@@ -99,7 +99,7 @@ exports.onLogin = async (req, res) => {
             data: admin
         })            
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         res.status(500).json({
             success: false,
             message: "Internal server error"
