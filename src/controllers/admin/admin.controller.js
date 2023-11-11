@@ -120,7 +120,7 @@ exports.getUser = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Admin details fetched successfully",
-            admin
+            user: admin
         })
     } catch (error) {
         // console.log(error)
