@@ -90,6 +90,7 @@ exports.onLogin = async (req, res) => {
             path: '/',
             expires: new Date(Date.now() + 24*3600*1000),            
             sameSite: "None",
+            secure: true,
         })
 
         admin.password = undefined
@@ -139,6 +140,7 @@ exports.onLogout = async (req, res) => {
             httpOnly: true,
             expires: 0,            
             sameSite: "None",
+            secure: true,
         });
         
         res.status(200).json({
