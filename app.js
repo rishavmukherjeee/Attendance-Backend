@@ -11,8 +11,8 @@ app.use(cors({
     'https://samss.netlify.app'
   ],
   credentials: true,  
-  allowedHeaders: ["Content-Type", "Authorization"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  // allowedHeaders: ["Content-Type", "Authorization"],
+  // methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));

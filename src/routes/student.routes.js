@@ -5,7 +5,7 @@ const { showAllIds } = require('../controllers/teacher/allSubject');
 //const teacherController = require('../controllers/teacher.controller');
 const {data}= require('../controllers/student/data');
 const { validateUser, authorizedRoles } = require('../middlewares/auth.milddleware');
-const { getAllStudentOfSemsterAndSection } = require('../controllers/student/student.controller.js');
+const { getAllStudentOfSemsterAndSection, registerStudent } = require('../controllers/student/student.controller.js');
 router.post('/', (req, res) => {
     
   console.log('Reached Student route'); 
@@ -21,6 +21,7 @@ router.post('/:id', (req, res) => {
 router.post('/data',data )
 router.post('/allSubjects', showAllIds)
 router.post('/showAll', showAll)
-router.get('/all/:semester/:section', validateUser, authorizedRoles("ADMIN", "SUPER-ADMIN"), getAllStudentOfSemsterAndSection)
+router.get('/all/:department/:semester/:section', validateUser, authorizedRoles("ADMIN", "SUPER-ADMIN"), getAllStudentOfSemsterAndSection)
+router.post('/register/:department/:semester/:section', validateUser, authorizedRoles("ADMIN", "SUPER-ADMIN"), registerStudent)
 
 module.exports = router;

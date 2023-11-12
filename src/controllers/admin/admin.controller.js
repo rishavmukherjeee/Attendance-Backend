@@ -89,9 +89,9 @@ exports.onLogin = async (req, res) => {
             path: "/",
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
             httpOnly: true,
-            sameSite: "none",
-            secure: true,
-        })
+            // sameSite: "lax",
+            // secure: true,
+        });
 
         admin.password = undefined
 
@@ -135,13 +135,7 @@ exports.getUser = async (req, res) => {
 
 exports.onLogout = async (req, res) => {    
     try {
-        res.cookie("token", null, {
-            path: '/',
-            httpOnly: true,
-            expires: 0,            
-            sameSite: "none",
-            secure: true,
-        });
+        res.clearCookie('token');
         
         res.status(200).json({
             success: true,
