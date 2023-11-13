@@ -89,8 +89,8 @@ exports.onLogin = async (req, res) => {
             path: "/",
             expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
             httpOnly: true,
-            // sameSite: "lax",
-            // secure: true,
+            sameSite: "none",
+            secure: true,
         });
 
         admin.password = undefined
