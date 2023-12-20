@@ -1,6 +1,8 @@
 const Admin = require('../../models/admin.js');
 const jwt = require('jsonwebtoken')
-const bcryptjs = require('bcryptjs')
+const bcryptjs = require('bcryptjs');
+const { model } = require('mongoose');
+const Subject = require('../../models/Subjects.js');
 
 exports.onRegister = async (req, res) => {
     try {
@@ -146,6 +148,26 @@ exports.onLogout = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Internal server error"
+        })
+    }
+}
+
+exports.generateReport = async (req, res) => {
+    try {
+        const att = model('it.5.as', Subject.schema);
+        const a1 = await att.find({});
+        const tt = a1[0].attendance.map(e=>{
+            // console.log(e);
+            return e.map(e1=>e1.valueOf());
+        })
+        console.log(tt.at(0).buffer.slice)
+        res.status(200).json({
+            success: true,
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
         })
     }
 }

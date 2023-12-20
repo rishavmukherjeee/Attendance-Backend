@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose')
 const db = mongoose.connection;
+const bcryptjs = require('bcryptjs');
 
 router.post('/', (req, res) => {
    const {email, password,stream }=req.body;
@@ -12,17 +13,19 @@ router.post('/', (req, res) => {
   
    const Collection =db.collection(stream);
    
-   Collection.findOne({email: email}, (err, found) => {
+   
+   Collection.findOne({email: email}, async (err, found) => {
         if(err) throw err;
         if(found){
             // Compare password
-            if(password === found.password) {
+            // if(password === found.password) {
+            if(await (bcryptjs.compareSync(password, found.password))) {
                 res.status(200).json("Yes");
             } else {
                 res.status(401).json("Invalid Password");
             }}
          else{
-                    res.status(404).json("User not found");
+                res.status(404).json("User not found");
             
         }
     }

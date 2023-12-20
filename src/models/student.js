@@ -20,8 +20,11 @@ const studentCollection = new mongoose.Schema(
     stream:{
       type:String,
     },
+    subjects: {
+      type: [mongoose.Schema.Types.String],
+    },
     weeklyremark:{
-      type:[String]
+      type:[String],
     }
   },
   

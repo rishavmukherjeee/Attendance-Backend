@@ -1,6 +1,6 @@
 const xlsx = require('xlsx')
 const fs = require('fs')
-const { getStudentModel, getStudentCollectionName } = require('../../utils/models')
+const { getStudentModel, getStudentCollectionName, getSubjectsModel } = require('../../utils/models')
 const { SheetName, FirstName, LastName, Email, Password, Id } = require('../../utils/constants')
 const { connection } = require('mongoose')
 const bcryptjs = require('bcryptjs')
@@ -16,6 +16,8 @@ exports.importStudents = async (req, res) => {
                 message: "All fields are required"
             });
         }
+
+        const subjects = (await getSubjectsModel(department, semester, section).find({}).select("_id")).map(e=>e._id);
         
         const Student = getStudentModel(department, semester, section);
 
@@ -34,7 +36,8 @@ exports.importStudents = async (req, res) => {
                     firstname: student[FirstName],
                     lastname: student[LastName],
                     email: student[Email],
-                    password: hashPassword
+                    password: hashPassword,
+                    subjects: subjects
                 });                
             } catch (error) {
                 console.log(error);
