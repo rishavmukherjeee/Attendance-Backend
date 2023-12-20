@@ -70,3 +70,22 @@ exports.onRegister = async (req, res) => {
         });        
     }
 }
+
+exports.getAllTeachersNameEmail = async (req, res) => {
+    try {
+        const teacherModel = mongoose.model("it.teachers", teacherCollection)
+        const teachers = await teacherModel.find({}).select(['firstname', 'lastname', 'email']);
+        res.status(200).json({
+            success: true,
+            message: "Teachers details fetched successfully",
+            teachers
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            teachers
+        });        
+    }
+}
