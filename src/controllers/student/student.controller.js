@@ -1,4 +1,4 @@
-const { model } = require('mongoose');
+const { model, Aggregate } = require('mongoose');
 const studentCollection = require('../../models/student');
 const bcryptjs = require('bcryptjs');
 const { getStudentModel } = require('../../utils/models');
@@ -100,7 +100,7 @@ exports.deleteStudent = async (req, res) => {
         }
         
         const student = await getStudentModel(department, semester, section).findById(id);
-
+        
         if(!student){
             return res.status(400).json({
                 success: false,

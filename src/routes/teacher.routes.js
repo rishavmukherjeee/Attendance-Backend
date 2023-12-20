@@ -35,6 +35,7 @@ router.post('/data',data)
 router.post('/newAttendance', attendanceController.updateAttendance);
 router.post('/showAll',showAll)
 router.get('/all', validateUser, authorizedRoles("SUPER-ADMIN", "ADMIN"), getAllTeachers)
+router.get('/allteachers', getAllTeachers)
 router.post('/register', onRegister)
 // router.get('/login', onLogin)
 // router.get('/me', validateUser, getUser)
