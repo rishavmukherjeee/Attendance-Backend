@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs');
 const { model } = require('mongoose');
 const Subject = require('../../models/Subjects.js');
+const { getSubjectsCollectionName, getSubjectsModel } = require('../../utils/models.js');
 
 exports.onRegister = async (req, res) => {
     try {
@@ -152,18 +153,81 @@ exports.onLogout = async (req, res) => {
     }
 }
 
+exports.createSubjectAdmin = async (req, res) => {
+    try {
+        const { department, semester, section, paper_code, paper_name } = req?.body;
+
+        if(!department || !semester || !section || !paper_code || !paper_name){
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required.'
+            });
+        }
+
+        const Subject = getSubjectsModel(department, semester, section);
+
+        const subject = await Subject.findById(paper_code);
+
+        if(subject){
+            return res.status(400).json({
+                success: false,
+                message: 'Subject already exist.'
+            });
+        }
+
+        const createSubject = await Subject.create({
+            _id: paper_code.toUpperCase(),
+            sem: semester,
+            subject: paper_name.toUpperCase(),
+        });
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Subject created successfully',
+            subject: createSubject,
+        })
+    } catch (error) {
+        console.log(error)        
+        return res.status(500).json({
+            success: false,
+        })
+    }
+}
+
 exports.generateReport = async (req, res) => {
     try {
-        const att = model('it.5.as', Subject.schema);
+        const {  } = req?.body;
+        
+        let department = 'it', semester = '5', section = 'a';
+
+        const att = model(getSubjectsCollectionName(department, semester, section), Subject.schema);
+
+
+
         const a1 = await att.find({});
-        const tt = a1[0].attendance.map(e=>{
-            // console.log(e);
-            return e.map(e1=>e1.valueOf());
-        })
-        console.log(tt.at(0).buffer.slice)
+
+        console.log(a1.at(7));
+
+        const tt = a1[7].attendance;
+
+        const noOfStu = a1.at(7).roll.length;
+        const noOfAtt = tt.length;
+
+        let cnt = 0;
+        
+        for(let j = 0; j<noOfAtt; j++){
+            for(let i = 0; i<noOfStu; i++){
+                console.log(a1.at(7).attendance.at(j).at(i));
+            }
+        }
+
+            console.log(cnt);
+
         res.status(200).json({
             success: true,
-        })
+        });
+
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
