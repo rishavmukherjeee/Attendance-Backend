@@ -235,3 +235,43 @@ exports.generateReport = async (req, res) => {
         })
     }
 }
+
+exports.deleteSubject = async (req, res) => {
+    try {
+        // id -> paper code
+        const { department, semester, section, id } = req?.params;
+
+        if(!department || !semester || !section || !id){
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required.'
+            });
+        }
+
+        const Subject = getSubjectsModel(department, semester, section);
+
+        const subject = await Subject.findById(id);
+
+        if(!subject){
+            return res.status(400).json({
+                success: false,
+                message: 'Subject does not exist.'
+            });
+        }
+
+        await Subject.findByIdAndDelete(id);        
+        
+        return res.status(200).json({
+            success: true,
+            message: 'Subject deleted successfully',
+        });
+        
+    } catch (error) {
+        console.log(error)        
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+
+    }
+}
