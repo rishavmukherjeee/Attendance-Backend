@@ -1,4 +1,4 @@
-POST http://192.168.203.100:3000/v1/teacher/data HTTP/1.1
+POST http://localhost:3000/v1/teacher/data HTTP/1.1
 content-type: application/json
 
 {
@@ -14,7 +14,7 @@ content-type: application/json
 }
 ###
 
-POST {{$dotenv IP}}/v1/student/data HTTP/1.1
+POST http://localhost:3000/v1/student/data HTTP/1.1
 content-type: application/json
 
 {
@@ -42,7 +42,16 @@ POST http://localhost:3000/v1 HTTP/1.1
 content-type: application/json
 
 {
-    "email":"teache1@gmail.com",
+    "email":"teacher1@gmail.com",
     "password":"teach123",
     "stream":"it.teachers"
+}
+###
+POST  http://localhost:3000/v1/teacher/createstream HTTP/1.1
+content-type: application/json
+
+{
+    "id":"Computer Science Engineering",
+    "semester":[1,2,3,4,5,6,7,8],
+    "section":[2,2,2,2,2,2,2,2]
 }
