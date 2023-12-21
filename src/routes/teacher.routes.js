@@ -40,7 +40,7 @@ router.get('/all', validateUser, authorizedRoles("SUPER-ADMIN", "ADMIN"), getAll
 router.get('/allteachers', getAllTeachersNameEmail)
 router.post('/register', onRegister)
 
-//This part is for global data which is used to store all departments streams and sctions
+//This part is for global data which is used to store all departments streams and sctions , create and edit to sedn to admin
 router.post('/createstream',allStream)
 router.post('/editstream',editStream)
 router.get('/stream',fetchAllStreams)
