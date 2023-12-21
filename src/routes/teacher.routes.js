@@ -39,9 +39,15 @@ router.post('/showAll',showAll)
 router.get('/all', validateUser, authorizedRoles("SUPER-ADMIN", "ADMIN"), getAllTeachers)
 router.get('/allteachers', getAllTeachersNameEmail)
 router.post('/register', onRegister)
+
+//This part is for global data which is used to store all departments streams and sctions
 router.post('/createstream',allStream)
 router.post('/editstream',editStream)
 router.get('/stream',fetchAllStreams)
+//upto here
+
+
+
 // router.get('/login', onLogin)
 // router.get('/me', validateUser, getUser)
 
