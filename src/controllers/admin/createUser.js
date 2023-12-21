@@ -17,7 +17,9 @@ exports.importStudents = async (req, res) => {
             });
         }
 
-        const subjects = (await getSubjectsModel(department, semester, section).find({}).select("_id")).map(e=>e._id);
+        const Subjects = await getSubjectsModel(department, semester, section).find({});
+
+        const subjects = Subjects.map(e=>e._id);
         
         const Student = getStudentModel(department, semester, section);
 
@@ -45,6 +47,16 @@ exports.importStudents = async (req, res) => {
         });
 
         fs.unlinkSync(req.file.path);
+
+        const studentRollNumbers = await (await Student.find({}).select('_id')).map(e=>e._id);
+
+        // for(let s = 0; s < Subjects.length; s++){
+        //     const S = Subjects.at(s);
+        //     S.roll = studentRollNumbers;
+        //     await S.save();
+        // }
+
+
         
         res.status(200).json({success: true, message: 'Excel file imported'});
 

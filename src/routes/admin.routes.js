@@ -4,7 +4,7 @@ const {createSubject,getAllSubjects} = require('../controllers/admin/createSubje
 const {showAll} = require('../controllers/student/show');
 const { upload } = require('../middlewares/multer.middleware');
 const { importStudents } = require('../controllers/admin/createUser');
-const { onLogin, onRegister, getUser, onLogout, generateReport } = require('../controllers/admin/admin.controller');
+const { onLogin, onRegister, getUser, onLogout, generateReport, createSubjectAdmin } = require('../controllers/admin/admin.controller');
 const { validateUser } = require('../middlewares/auth.milddleware');
 
 router.post('/', (req, res) => {    
@@ -28,5 +28,6 @@ router.post('/login', onLogin);
 router.get('/me', validateUser, getUser);
 router.get('/logout', onLogout);
 router.get('/report-generation', generateReport);
+router.post('/subject/create', createSubjectAdmin);
 
 module.exports = router;
