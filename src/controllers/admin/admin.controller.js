@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs');
 const { model } = require('mongoose');
 const Subject = require('../../models/Subjects.js');
-const { getSubjectsCollectionName, getSubjectsModel } = require('../../utils/models.js');
+const { getSubjectsCollectionName, getSubjectsModel, getStudentModel } = require('../../utils/models.js');
 
 exports.onRegister = async (req, res) => {
     try {
@@ -274,4 +274,155 @@ exports.deleteSubject = async (req, res) => {
         });
 
     }
+}
+
+exports.addRollInSubjets = async (req, res) => {
+    try {
+        const { department, semester, section, papercode } = req?.params;
+        const { roll } = req?.body;
+
+        if(!department || !semester || !section || !papercode || !roll){
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required.'
+            });
+        }
+    
+        const Subject = getSubjectsModel(department, semester, section);
+    
+        const subject = await Subject.findById(papercode);
+    
+        if(!subject){
+            return res.status(400).json({
+                success: false,
+                message: 'Subject does not exist.'
+            });
+        }
+        
+        const isRollAlreadyPresent = subject.roll.includes(roll);
+        if(isRollAlreadyPresent){
+            return res.status(400).json({
+                success: false,
+                message: 'Roll number is already exist.'
+            });
+        }  
+        
+        subject.roll.push(roll);
+
+        await subject.save();
+        
+        return res.status(200).json({
+            success: true,
+            message: `In ${semester} in ${section} in ${subject.subject} paper the ${roll} number added successfully`,
+        });
+        
+    } catch (error) {
+        console.log(error)        
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    
+    }
+}
+
+exports.getStudentsBySubject = async (req, res) => {
+    try {
+        const { department, semester, section, papercode } = req?.params;
+            
+        if(!department || !semester || !section || !papercode){
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required.'
+            });
+        }
+    
+        const Subject = getSubjectsModel(department, semester, section);
+    
+        const subject = await Subject.findById(papercode);
+        
+        if(!subject){
+            return res.status(400).json({
+                success: false,
+                message: 'Subject does not exist.',
+            });
+        }
+        
+        const rolls = subject.roll;
+        
+        if(rolls.length == 0){
+            return res.status(400).json({
+                success: false,
+                message: 'Roll Number does not exist.',
+            });
+        }
+
+        const Student = getStudentModel(department, semester, section);
+
+        const students = await Student.find({ _id: { $in: rolls } }).select(['firstname', 'lastname', 'email']);
+
+        return res.status(200).json({
+            success: true,
+            message: `In ${semester} in ${section} in ${subject.subject} paper students fetched successfully`,
+            students,
+        });
+        
+    } catch (error) {
+        console.log(error)        
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    
+    }    
+}
+
+exports.deleteRollInSubject = async (req, res) => {
+    try {
+        const { department, semester, section, papercode } = req?.params;
+        const { roll } = req?.body;
+    
+        if(!department || !semester || !section || !papercode || !roll){
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required.'
+            });
+        }
+    
+        const Subject = getSubjectsModel(department, semester, section);
+    
+        const subject = await Subject.findById(papercode);
+    
+        if(!subject){
+            return res.status(400).json({
+                success: false,
+                message: 'Subject does not exist.'
+            });
+        }
+        
+        const isRollAlreadyPresent = subject.roll.includes(roll);
+        if(!isRollAlreadyPresent){
+            return res.status(400).json({
+                success: false,
+                message: 'Roll number does not exist.'
+            });
+        }  
+        
+        subject.roll = subject.roll.filter(r=>r!==roll);
+
+        await subject.save();
+        
+        return res.status(200).json({
+            success: true,
+            message: `In ${semester} in ${section} in ${subject.subject} paper the ${roll} number removed successfully`,
+        });
+        
+    } catch (error) {
+        console.log(error)        
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    
+    } 
 }
