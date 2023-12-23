@@ -155,9 +155,9 @@ exports.onLogout = async (req, res) => {
 
 exports.createSubjectAdmin = async (req, res) => {
     try {
-        const { department, semester, section, paper_code, paper_name } = req?.body;
-
-        if(!department || !semester || !section || !paper_code || !paper_name){
+        const { department, semester, section, papercode, papername } = req?.body;
+        console.log(req.body);
+        if(!department || !semester || !section || !papercode || !papername){
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required.'
@@ -166,7 +166,7 @@ exports.createSubjectAdmin = async (req, res) => {
 
         const Subject = getSubjectsModel(department, semester, section);
 
-        const subject = await Subject.findById(paper_code);
+        const subject = await Subject.findById(papercode);
 
         if(subject){
             return res.status(400).json({
@@ -176,9 +176,9 @@ exports.createSubjectAdmin = async (req, res) => {
         }
 
         const createSubject = await Subject.create({
-            _id: paper_code.toUpperCase(),
+            _id: papercode.toUpperCase(),
             sem: semester,
-            subject: paper_name.toUpperCase(),
+            subject: papername.toUpperCase(),
         });
         
         return res.status(200).json({

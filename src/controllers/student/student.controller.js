@@ -40,8 +40,8 @@ exports.getAllStudentOfSemsterAndSection = async (req, res) => {
 exports.registerStudent = async (req, res) => {
     try {
         const { department, semester, section } = req?.params;
-        const { firstname, lastname, email, password, id, mobile } = req?.body;
-        if(!firstname || !lastname || !email || !department || !semester || !section) {
+        const { firstname, lastname, email, password, _id, mobile } = req?.body;
+        if(!_id || !firstname || !lastname || !email || !department || !semester || !section) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
@@ -50,7 +50,7 @@ exports.registerStudent = async (req, res) => {
 
         const Student = getStudentModel(department, semester, section);
         
-        let student = await Student.findById(id);
+        let student = await Student.findById(_id);
 
         if(student) {
             return res.status(400).json({
@@ -62,7 +62,7 @@ exports.registerStudent = async (req, res) => {
         const hashPassword = await bcryptjs.hash(password, 10);
 
         student = await Student.create({
-            _id: id,
+            _id,
             firstname,
             lastname,
             email,
