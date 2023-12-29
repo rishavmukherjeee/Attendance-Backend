@@ -24,6 +24,7 @@ app.use("/v1/message",require("./src/utils/messages"))
 app.use("/v1/teacher", require("./src/routes/teacher.routes"));
 app.use("/v1/student", require("./src/routes/student.routes"));
 app.use("/v1/admin", require("./src/routes/admin.routes"));
+app.use("/v1/department", require("./src/routes/department.routes"));
 
 app.get("/", async (req, res) => {
   res.send("Server is running");

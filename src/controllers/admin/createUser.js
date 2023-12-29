@@ -17,9 +17,9 @@ exports.importStudents = async (req, res) => {
             });
         }
 
-        const Subjects = await getSubjectsModel(department, semester, section).find({});
+        // const Subjects = await getSubjectsModel(department, semester, section).find({});
 
-        const subjects = Subjects.map(e=>e._id);
+        // const subjects = Subjects.map(e=>e._id);
         
         const Student = getStudentModel(department, semester, section);
 
@@ -38,8 +38,7 @@ exports.importStudents = async (req, res) => {
                     firstname: student[FirstName],
                     lastname: student[LastName],
                     email: student[Email],
-                    password: hashPassword,
-                    subjects: subjects
+                    password: hashPassword
                 });                
             } catch (error) {
                 console.log(error);
@@ -48,7 +47,7 @@ exports.importStudents = async (req, res) => {
 
         fs.unlinkSync(req.file.path);
 
-        const studentRollNumbers = await (await Student.find({}).select('_id')).map(e=>e._id);
+        // const studentRollNumbers = await (await Student.find({}).select('_id')).map(e=>e._id);
 
         // for(let s = 0; s < Subjects.length; s++){
         //     const S = Subjects.at(s);

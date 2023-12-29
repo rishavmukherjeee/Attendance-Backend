@@ -4,7 +4,7 @@ const {createSubject,getAllSubjects} = require('../controllers/admin/createSubje
 const {showAll} = require('../controllers/student/show');
 const { upload } = require('../middlewares/multer.middleware');
 const { importStudents } = require('../controllers/admin/createUser');
-const { onLogin, onRegister, getUser, onLogout, generateReport, createSubjectAdmin, deleteSubject, modifyRollInSubjets, getStudentsBySubject, addRollInSubjets, deleteRollInSubject } = require('../controllers/admin/admin.controller');
+const { onLogin, onRegister, getUser, onLogout, generateReport, createSubjectAdmin, deleteSubject, getStudentsBySubject, deleteRollInSubject, getStudentsToBeAddedInSubject, addStudentsInSubjets } = require('../controllers/admin/admin.controller');
 const { validateUser } = require('../middlewares/auth.milddleware');
 
 router.post('/', (req, res) => {    
@@ -35,9 +35,17 @@ router.delete('/subject/delete/:department/:semester/:section/:id', deleteSubjec
 /**
  * add roll number inside the subjects roll field 
  */
-router.put('/subject/create/student/:department/:semester/:section/:papercode', addRollInSubjets);
+router.put('/subject/create/student/:department/:semester/:section/:papercode', addStudentsInSubjets);
 router.get('/subject/get/student/:department/:semester/:section/:papercode', getStudentsBySubject);
+router.get('/subject/get/pending/student/:department/:semester/:section/:papercode', getStudentsToBeAddedInSubject);
 router.put('/subject/delete/student/:department/:semester/:section/:papercode', deleteRollInSubject);
+
+// router.route('/department')
+//       .get()
+//       .post();
+
+// router.route('/department/:department')
+//       .delete();
 
 
 module.exports = router;

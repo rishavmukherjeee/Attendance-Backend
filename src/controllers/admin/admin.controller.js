@@ -276,12 +276,13 @@ exports.deleteSubject = async (req, res) => {
     }
 }
 
-exports.addRollInSubjets = async (req, res) => {
+exports.addStudentsInSubjets = async (req, res) => {
     try {
         const { department, semester, section, papercode } = req?.params;
-        const { roll } = req?.body;
-
-        if(!department || !semester || !section || !papercode || !roll){
+        
+        const { studentList } = req?.body;
+        
+        if(!department || !semester || !section || !papercode || !studentList || !studentList?.length){
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required.'
@@ -299,21 +300,28 @@ exports.addRollInSubjets = async (req, res) => {
             });
         }
         
-        const isRollAlreadyPresent = subject.roll.includes(roll);
-        if(isRollAlreadyPresent){
-            return res.status(400).json({
-                success: false,
-                message: 'Roll number is already exist.'
-            });
-        }  
+        // const isRollAlreadyPresent = subject.roll.includes(roll);
+        // if(isRollAlreadyPresent){
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Roll number is already exist.'
+        //     });
+        // }  
         
-        subject.roll.push(roll);
+        subject.roll.push(...studentList.map(stu=>stu?._id));
 
         await subject.save();
+
+        const Student = getStudentModel(department, semester, section);
+
+        const listOfStudentIds = studentList.map(e=>e?._id);
+        const rrr = await Student.updateMany({_id:{$in: listOfStudentIds}}, {$push:{subjects: papercode}});
+
+        console.log(rrr);
         
         return res.status(200).json({
             success: true,
-            message: `In ${semester} in ${section} in ${subject.subject} paper the ${roll} number added successfully`,
+            message: `Students added successfully`,
         });
         
     } catch (error) {
@@ -410,11 +418,62 @@ exports.deleteRollInSubject = async (req, res) => {
         
         subject.roll = subject.roll.filter(r=>r!==roll);
 
+        const Student = getStudentModel(department, semester, section);
+
+        const student = await Student.findById(roll);
+
+        student.subjects = student.subjects.filter(pc=>pc!==papercode);
+
         await subject.save();
+        await student.save();
         
         return res.status(200).json({
             success: true,
             message: `In ${semester} in ${section} in ${subject.subject} paper the ${roll} number removed successfully`,
+        });
+        
+    } catch (error) {
+        console.log(error)        
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    
+    } 
+}
+
+exports.getStudentsToBeAddedInSubject = async (req, res) => {
+    try {
+        const { department, semester, section, papercode } = req?.params;
+
+        if(!department || !semester || !section || !papercode){
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required.'
+            });
+        }
+    
+        const Subject = getSubjectsModel(department, semester, section);
+
+        const Student = getStudentModel(department, semester, section);
+
+        const students = await Student.find({}).select(['_id', 'subjects']);
+        
+        const subject = await Subject.findById(papercode);
+        
+        const studentsAlreadyNotPresent = students.filter(student => !subject.roll.includes(student._id));
+
+        if(studentsAlreadyNotPresent.length === 0){
+            return res.status(400).json({
+                success: false,
+                message: 'All students are included, no one has left',
+            });
+        }
+        
+        return res.status(200).json({
+            success: true,
+            message: `Students list fetched successfully`,
+            students: studentsAlreadyNotPresent,
         });
         
     } catch (error) {

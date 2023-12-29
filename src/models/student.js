@@ -21,7 +21,7 @@ const studentCollection = new mongoose.Schema(
       type:String,
     },
     subjects: {
-      type: [mongoose.Schema.Types.String],
+      type: [String],
     },
     weeklyremark:{
       type:[String],

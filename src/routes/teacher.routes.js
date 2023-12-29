@@ -19,8 +19,8 @@ const { showAllIds } = require('../controllers/teacher/allSubject');
 const {data}  = require('../controllers/teacher/data');
 const { validateUser, authorizedRoles } = require('../middlewares/auth.milddleware');
 const { getAllTeachers, onRegister, getAllTeachersNameEmail } = require('../controllers/teacher/teacher.controller.js');
-const {allStream,editStream,fetchAllStreams} = require('../utils/utility');
 const { route } = require('./student.routes.js');
+const { createDepartment, editDepartment, getAllDepartment } = require('../controllers/department.controller.js');
 router.post('/', (req, res) => {
   console.log('Reached teacher route'); 
   res.status(200).send('Teacher Route');
@@ -41,9 +41,9 @@ router.get('/allteachers', getAllTeachersNameEmail)
 router.post('/register', onRegister)
 
 //This part is for global data which is used to store all departments streams and sctions , create and edit to sedn to admin
-router.post('/createstream',allStream)
-router.post('/editstream',editStream)
-router.get('/stream',fetchAllStreams)
+router.post('/createstream',createDepartment)
+router.post('/editstream',editDepartment)
+router.get('/stream',getAllDepartment)
 //upto here
 
 
