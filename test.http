@@ -55,3 +55,74 @@ content-type: application/json
     "semester":[1,2,3,4,5,6,7,8],
     "section":[2,2,2,2,2,2,2,2]
 }
+###
+GET http://localhost:3000/v1/student/attendance/it.5.as/1 HTTP/1.1
+content-type: application/json
+
+{
+    
+}
+/*
+function bae4(base64) {
+    let decoded = atob(base64);
+    let arr = [];
+    for (let i = 0; i < decoded.length; i++) {
+        arr.push(decoded[i] === '\u0001' ? 1 : 0);
+    }
+    return arr;
+}
+
+[
+  {
+    "_id": "PCC-CS501",
+    "date": 20122023,
+    "attendance": "AQABAAEAAAEAAQ=="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 1102023,
+    "attendance": "AQAAAQABAAEBAQEAAQAAAAEAAQA="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 2102023,
+    "attendance": "AQAAAQABAAEBAQEAAQAAAAEAAQA="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 3102023,
+    "attendance": "AQEAAQABAAEBAQEAAQEAAAEAAAA="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 4102023,
+    "attendance": "AAEBAQABAAEAAQEAAQEAAAEAAQA="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 14102023,
+    "attendance": "AQAAAAEAAAAAAAAAAAAAAAAAAAE="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 3112023,
+    "attendance": "AQAAAQAAAAAAAAAAAQAAAAAAAAE="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 20122023,
+    "attendance": "AAAAAQABAAAAAAAAAQEBAAEAAAE="
+  },
+  {
+    "_id": "TP-P 501",
+    "date": 21122023,
+    "attendance": "AQABAQAAAAABAAAAAAAAAAAAAAE="
+  }
+]*/
+###
+GET http://attendance-backend-s3hr.vercel.app HTTP/1.1
+content-type: application/json
+
+{
+    
+}

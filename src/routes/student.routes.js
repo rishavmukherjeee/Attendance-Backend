@@ -6,6 +6,7 @@ const { showAllIds } = require('../controllers/teacher/allSubject');
 const {data}= require('../controllers/student/data');
 const { validateUser, authorizedRoles } = require('../middlewares/auth.milddleware');
 const { getAllStudentOfSemsterAndSection, registerStudent, deleteStudent } = require('../controllers/student/student.controller.js');
+const { getRollAttendance } = require('../controllers/student/attendance.js');
 router.post('/', (req, res) => {
     
   console.log('Reached Student route'); 
@@ -21,6 +22,9 @@ router.post('/:id', (req, res) => {
 router.post('/data',data )
 router.post('/allSubjects', showAllIds)
 router.post('/showAll', showAll)
+router.get('/attendance/:stream/:rollNumber', getRollAttendance);
+
+
 router.get('/all/:department/:semester/:section', validateUser, authorizedRoles("ADMIN", "SUPER-ADMIN"), getAllStudentOfSemsterAndSection)
 router.post('/register/:department/:semester/:section', validateUser, authorizedRoles("ADMIN", "SUPER-ADMIN"), registerStudent)
 router.delete('/:id/:department/:semester/:section', validateUser, authorizedRoles("ADMIN", "SUPER-ADMIN", "FACULTY"), deleteStudent)
