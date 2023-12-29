@@ -10,12 +10,16 @@ const getRollAttendance = async (req, res) => {
     const results = await cursor.toArray();
 
     if (results.length > 0) {
+      
+      const rollIndex = results[0].roll.indexOf(rollNumber);
+
       res.json(results.map(result => {
         return result.date.map((date, index) => {
             return {
                 _id: result._id,
               date,
-              attendance: result.attendance[index]
+              attendance: result.attendance[index],
+              rollNumberIndex: rollIndex
             };
         });
       }).flat());

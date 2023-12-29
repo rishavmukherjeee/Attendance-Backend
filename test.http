@@ -119,3 +119,10 @@ function bae4(base64) {
     "attendance": "AQABAQAAAAABAAAAAAAAAAAAAAE="
   }
 ]*/
+###
+GET http://attendance-backend-s3hr.vercel.app HTTP/1.1
+content-type: application/json
+
+{
+    
+}
