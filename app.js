@@ -3,8 +3,11 @@ const cors = require("cors");
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
+const swaggerDocs = require("./src/utils/swagger");
+
 
 // middleware
+swaggerDocs(app, 3000);
 app.use(cors({
   origin: [
     'http://localhost:5173',
@@ -17,6 +20,8 @@ app.use(cors({
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, 'public')));
+
+
 
 app.use("/v1",require("./src/middlewares/login"))
 app.use("/v1/message",require("./src/utils/messages"))

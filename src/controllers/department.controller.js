@@ -84,16 +84,16 @@ exports.getAllDepartment = async (req, res) => {
 
 exports.getDepartmentById = async (req, res) => {
     try {
-        const { departmentId } = req?.params;
+        const { id } = req?.params;
 
-        if(!departmentId){
+        if(!id){
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required.'
             });
         }
 
-        const department = await Department.findOne({id: departmentId});
+        const department = await Department.findOne({id});
 
         if(!department){
             return res.status(400).json({
