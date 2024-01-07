@@ -1,5 +1,2 @@
-/.env
-/del
 /node_modules
-*.xlsx
-*.zip
+.env
