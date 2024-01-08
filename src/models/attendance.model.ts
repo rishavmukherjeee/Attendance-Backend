@@ -1,6 +1,6 @@
 import { Schema, Document, model } from "mongoose";
 
-interface IAttendance extends Document {
+export interface IAttendance extends Document {
     student: Schema.Types.ObjectId;
     subject: Schema.Types.ObjectId;
     date: Date;

@@ -1,3 +1,4 @@
+import { NextFunction } from "express";
 import { Schema, Document, model } from "mongoose";
 
 export interface IDepartment extends Document {
@@ -5,6 +6,7 @@ export interface IDepartment extends Document {
     description: string;
     shortName: string;
     subjects: Schema.Types.ObjectId[];
+    semesters: Schema.Types.ObjectId[];
     faculties: Schema.Types.ObjectId[];
 }
 
@@ -26,6 +28,12 @@ const departmentSchema = new Schema<IDepartment>({
         {
             type: Schema.Types.ObjectId,
             ref: "Subject"
+        }
+    ],
+    semesters: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Semester"
         }
     ],
     faculties: [

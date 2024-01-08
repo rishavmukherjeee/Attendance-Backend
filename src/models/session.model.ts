@@ -19,7 +19,6 @@ const sessionSchema = new Schema<ISession>({
     },
     to: {
         type: Number,
-        default: new Date().getFullYear() + 4,
         minlength: 4,
         maxlength: 4,
     },
@@ -40,6 +39,7 @@ const sessionSchema = new Schema<ISession>({
 
 sessionSchema.pre<ISession>("save", function (next: NextFunction) {
     if (this.from > this.to) return next(new AppError("starting year must be less than end year", 403))
+    this.to = this.from + 4
     next()
 })
 

@@ -6,21 +6,19 @@ import { generateToken } from "../utils/auth";
 
 const studentRegistration = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let user: IStudent;
-        user = new Student({
+        const user: IStudent = new Student({
             ...req.body
         })
         const result = await user.save()
         res.status(201).send(result)
     } catch (error) {
-        next(new AppError(`${error.message} hereeee`, 400))
+        next(new AppError(`${error.message}`, 400))
     }
 }
 
 const teacherRegistration = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let user: ITeacher;
-        user = new Teacher({
+        const user: ITeacher = new Teacher({
             ...req.body
         })
         const result = await user.save()
@@ -35,8 +33,7 @@ const studentLogin = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { email, password } = req.body
 
-        let user: IStudent;
-        user = await Student.findOne({ email })
+        const user: IStudent = await Student.findOne({ email })
 
         if (!user) return next(new AppError("user not found", 404))
 
@@ -64,8 +61,7 @@ const teacherLogin = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const { email, password } = req.body
 
-        let user: ITeacher;
-        user = await Teacher.findOne({ email })
+        const user: ITeacher = await Teacher.findOne({ email })
 
         if (!user) return next(new AppError("user not found", 404))
 

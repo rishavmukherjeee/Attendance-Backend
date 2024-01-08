@@ -15,6 +15,7 @@ export interface IStudent extends Document {
     subjects: Schema.Types.ObjectId[];
     session: Schema.Types.ObjectId;
     section: string | Schema.Types.ObjectId;
+    attendance: Schema.Types.ObjectId[];
     isPasswordValid: (password: string) => Promise<Error | boolean>
 }
 
@@ -89,7 +90,13 @@ const studentSchema = new Schema<IStudent>({
     section: {
         type: Schema.Types.ObjectId,
         ref: "Section",
-    }
+    },
+    attendance: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Attendance",
+        }
+    ]
 },
     {
         timestamps: true,

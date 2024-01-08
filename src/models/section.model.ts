@@ -1,8 +1,10 @@
 import { Schema, Document, model } from "mongoose";
 
-interface ISection extends Document {
+export interface ISection extends Document {
     name: string;
+    students: Schema.Types.ObjectId[];
     department: Schema.Types.ObjectId;
+    semester: Schema.Types.ObjectId;
     strength: number;
 }
 
@@ -11,9 +13,21 @@ const sectionSchema = new Schema<ISection>({
         type: String,
         required: [true, "section name is rquired"],
     },
+    students: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Student",
+            required: true
+        }
+    ],
     department: {
         type: Schema.Types.ObjectId,
         ref: "Department",
+        required: true
+    },
+    semester: {
+        type: Schema.Types.ObjectId,
+        ref: "Semester",
         required: true
     },
     strength: {

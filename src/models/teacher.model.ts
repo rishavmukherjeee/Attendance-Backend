@@ -12,6 +12,7 @@ export interface ITeacher extends Document {
     address: string;
     password: string;
     subjects: Schema.Types.ObjectId[];
+    department: Schema.Types.ObjectId;
     role: string;
     status: string;
     isPasswordValid: (password: string) => Promise<Error | boolean>;
@@ -86,6 +87,10 @@ const teacherSchema = new Schema<ITeacher>({
         type: String,
         enum: ["PENDING", "ACTIVE", "CANCELLED", "SUSPENDED"],
         default: "PENDING"
+    },
+    department: {
+        type: Schema.Types.ObjectId,
+        ref: "Department"
     }
 },
     {
