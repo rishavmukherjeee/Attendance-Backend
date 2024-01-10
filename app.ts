@@ -5,6 +5,8 @@ import accountRouter from "./src/routes/accounts.route"
 import departmentRouter from "./src/routes/department.route"
 import semesterRouter from "./src/routes/semester.route"
 import sessionRouter from "./src/routes/session.route"
+import subjectRouter from "./src/routes/subject.route"
+import sectionRouter from "./src/routes/section.route"
 
 // errorHandler for only development
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
@@ -25,6 +27,8 @@ app.use('/api/v2/accounts', accountRouter)
 app.use('/api/v2/department', departmentRouter)
 app.use('/api/v2/semester', semesterRouter)
 app.use('/api/v2/session', sessionRouter)
+app.use('/api/v2/subject', subjectRouter)
+app.use('/api/v2/section', sectionRouter)
 
 app.get('/', (req, res) => {
     res.send("hello")
