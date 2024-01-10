@@ -18,7 +18,6 @@ const sectionSchema = new Schema<ISection>({
         {
             type: Schema.Types.ObjectId,
             ref: "Student",
-            required: true
         }
     ],
     department: {

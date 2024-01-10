@@ -26,10 +26,9 @@ export const getSectionById = async (req: Request, res: Response, next: NextFunc
     }
 }
 
-export const getSectionByQuery = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllSection = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { department, semester } = req?.query;
-        const sections: ISection[] = await Section.find({ department, semester });
+        const sections: ISection[] = await Section.find();
         res.status(200).json({ sections });              
     } catch (error) {
         next(new AppError(error?.message, 400));
@@ -43,7 +42,7 @@ export const editSectionById = async (req: Request, res: Response, next: NextFun
             id,
             {$set: { ...req?.body }},
             {new: true}
-        );
+        );        
         res.status(200).json({ section, message: "section updated successfully" });              
     } catch (error) {
         next(new AppError(error?.message, 400));

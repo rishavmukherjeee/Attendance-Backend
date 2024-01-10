@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createSection, deleteSectionById, editSectionById, getSectionById, getSectionByQuery } from '../controllers/section.controller';
+import { createSection, deleteSectionById, editSectionById, getAllSection, getSectionById } from '../controllers/section.controller';
 const router = Router();
 
 router.route("/")
-      .get(getSectionByQuery)
+      .get(getAllSection)
       .post(createSection);
 
 router.route("/:id")
