@@ -1,3 +1,4 @@
+import { NextFunction } from 'express'
 import { Schema, Document, model } from "mongoose";
 
 export interface ISection extends Document {
@@ -17,7 +18,6 @@ const sectionSchema = new Schema<ISection>({
         {
             type: Schema.Types.ObjectId,
             ref: "Student",
-            required: true
         }
     ],
     department: {
@@ -40,6 +40,12 @@ const sectionSchema = new Schema<ISection>({
     }
 );
 
+sectionSchema.pre<ISection>("save", async function(next: NextFunction) {
+    if(this.isModified("students")) {
+        this.strength = this.students.length;
+    }
+    next();
+})
 
 const Section = model('Section', sectionSchema);
 

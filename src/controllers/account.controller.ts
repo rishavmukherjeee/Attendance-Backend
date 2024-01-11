@@ -7,9 +7,11 @@ import { generateToken } from "../utils/auth";
 const studentRegistration = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: IStudent = new Student({
-            ...req.body
+            dob: new Date(req.body.dob),
+            ...req.body,
         })
         const result = await user.save()
+        result.password = undefined
         res.status(201).send(result)
     } catch (error) {
         next(new AppError(`${error.message}`, 400))

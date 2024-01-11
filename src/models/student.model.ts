@@ -5,7 +5,8 @@ import { NextFunction } from "express";
 export interface IStudent extends Document {
     firstname: string;
     lastname: string;
-    age: number;
+    dob: Date;
+    // age: number;
     email: string;
     phone: Number;
     address: string;
@@ -34,10 +35,14 @@ const studentSchema = new Schema<IStudent>({
         maxlength: [16, "last name must be less than 16 character"],
         trim: true,
     },
-    age: {
-        type: Number,
-        required: [true, "Age is required"],
+    dob: {
+        type: Date,
+        required: [true, "Date of birth is required"],
     },
+    // age: {
+    //     type: Number,
+    //     required: [true, "Age is required"],
+    // },
     email: {
         type: String,
         required: [true, "Email is required"],
@@ -113,6 +118,22 @@ studentSchema.pre<IStudent>('save', async function (next: NextFunction) {
 studentSchema.methods.isPasswordValid = async function (password: IStudent['password']): Promise<Error | boolean> {
     return await bcrypt.compare(password, this.password)
 }
+
+studentSchema.virtual("age").get(function() {
+    if (this.dob) {
+        const today = new Date();
+        const birthDate = new Date(this.dob);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }    
+    return undefined;
+});
+
+studentSchema.set('toJSON', { virtuals: true });
 
 const Student = model("Student", studentSchema)
 
