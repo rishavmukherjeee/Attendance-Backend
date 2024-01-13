@@ -23,6 +23,13 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json())
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 if (process.argv[2] === '--dev') process.env.NODE_ENV = 'dev'
 else process.env.NODE_ENV = 'prod'
 
