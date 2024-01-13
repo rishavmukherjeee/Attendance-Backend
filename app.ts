@@ -23,6 +23,9 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json())
 
+if (process.argv[2] === '--dev') process.env.NODE_ENV = 'dev'
+else process.env.NODE_ENV = 'prod'
+
 app.use('/api/v2/accounts', accountRouter)
 app.use('/api/v2/department', departmentRouter)
 app.use('/api/v2/semester', semesterRouter)
@@ -34,6 +37,26 @@ app.get('/', (req, res) => {
     res.send("hello")
 })
 
-app.use(errorHandler)
+if (process.env.NODE_ENV === 'dev') {
+    // errorHandler for only development environment
+    const errorHandlerDev: ErrorRequestHandler = (err, req, res, next) => {
+        res.status(err.statusCode).json({
+            status: err.status,
+            err: err,
+            message: err.message,
+            stack: err.stack,
+        });
+    }
+    app.use(errorHandlerDev)
+}
+else {
+    // errorHandler for only produnction environment
+    const errorHandlerProd: ErrorRequestHandler = (err, req, res, next) => {
+        res.status(500).json({
+            message: 'something went wrong'
+        });
+    }
+    app.use(errorHandlerProd)
+}
 
 export default app

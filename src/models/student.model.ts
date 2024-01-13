@@ -6,7 +6,6 @@ export interface IStudent extends Document {
     firstname: string;
     lastname: string;
     dob: Date;
-    // age: number;
     email: string;
     phone: Number;
     address: string;
@@ -119,7 +118,7 @@ studentSchema.methods.isPasswordValid = async function (password: IStudent['pass
     return await bcrypt.compare(password, this.password)
 }
 
-studentSchema.virtual("age").get(function() {
+studentSchema.virtual("age").get(function () {
     if (this.dob) {
         const today = new Date();
         const birthDate = new Date(this.dob);
@@ -129,7 +128,7 @@ studentSchema.virtual("age").get(function() {
             age--;
         }
         return age;
-    }    
+    }
     return undefined;
 });
 
