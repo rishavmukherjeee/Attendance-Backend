@@ -4,7 +4,7 @@ import { studentLogin, studentRegistration, teacherLogin, teacherRegistration } 
 const router = Router()
 
 router.get('/', (req, res) => {
-    res.send("account route")
+    res.send("authentication route")
 })
 router.post("/student/register", studentRegistration)
 router.post("/teacher/register", teacherRegistration)
