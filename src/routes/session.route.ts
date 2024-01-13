@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { createSession } from "../controllers/session.controller"
+import { createSession, getAllSession, getSessionById } from "../controllers/session.controller"
 const router = Router()
 
-router.route("/").post(createSession)
+router.post("/createOne", createSession)
+router.get("/", getAllSession)
+router.get("/:id", getSessionById)
 
 export default router

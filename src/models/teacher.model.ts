@@ -15,6 +15,7 @@ export interface ITeacher extends Document {
     department: Schema.Types.ObjectId;
     role: string;
     status: string;
+    isAdmin: boolean,
     isPasswordValid: (password: string) => Promise<Error | boolean>;
 }
 
@@ -80,8 +81,12 @@ const teacherSchema = new Schema<ITeacher>({
     ],
     role: {
         type: String,
-        enum: ["FACULTY", "ADMIN", "HOD", "DIRECRTOR"],
+        enum: ["FACULTY", "HOD", "DIRECRTOR"],
         default: "FACULTY"
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
     status: {
         type: String,

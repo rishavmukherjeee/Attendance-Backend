@@ -15,10 +15,12 @@ const departmentSchema = new Schema<IDepartment>({
         type: String,
         minlength: 4,
         required: true,
+        unique: true
     },
     shortName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     description: {
         type: String,
