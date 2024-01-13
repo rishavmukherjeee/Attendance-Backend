@@ -3,7 +3,7 @@ import { getSemesterById, getAllSemester, createSemester, deleteById } from "../
 const router = Router()
 
 router.get("/all", getAllSemester)
-router.post("/", createSemester)
+router.post("/createOne", createSemester)
 router.post("/:id", getSemesterById)
 router.delete("/:id", deleteById)
 

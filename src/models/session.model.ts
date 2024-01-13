@@ -25,7 +25,7 @@ const sessionSchema = new Schema<ISession>({
     stream: {
         type: Schema.Types.ObjectId,
         ref: "Department",
-        required: true
+        required: true,
     },
     course: {
         type: String,
@@ -37,11 +37,19 @@ const sessionSchema = new Schema<ISession>({
     }
 )
 
+// Add a unique compound index on 'from' and 'stream'
+sessionSchema.index({ from: 1, stream: 1 }, { unique: true });
+
 sessionSchema.pre<ISession>("save", function (next: NextFunction) {
     if (this.from > this.to) return next(new AppError("starting year must be less than end year", 403))
     this.to = this.from + 4
     next()
 })
+
+sessionSchema.pre<ISession>(/^find/, function (next) {
+    this.populate({ path: "stream", select: "name shortName -_id" })
+    next();
+});
 
 const Session = model("Session", sessionSchema)
 

@@ -1,12 +1,10 @@
-import { NextFunction } from "express";
 import { Schema, Document, model } from "mongoose";
-import AppError from "../utils/app-error";
-
 export interface ISubject extends Document {
     name: string;
     code: string;
     description: string;
-    semester: number;
+    type: string;
+    credit_points: number;
 }
 
 const subjectSchema = new Schema<ISubject>({
@@ -18,17 +16,22 @@ const subjectSchema = new Schema<ISubject>({
     code: {
         type: String,
         minlength: 4,
+        unique: true,
+        required: true
+    },
+    "type": {
+        type: String,
+        enum: ["THEORY", "LAB"],
+        default: "THEORY"
+    },
+    credit_points: {
+        type: Number,
+        required: true
     },
     description: {
-        type: String
-    },
-    semester: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 8
+        type: String,
+        default: ""
     }
-
 },
     {
         timestamps: true

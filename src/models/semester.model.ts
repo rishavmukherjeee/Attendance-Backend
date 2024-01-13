@@ -14,7 +14,7 @@ export interface ISemester extends Document {
 const semesterSchema = new Schema<ISemester>({
     name: {
         type: Number,
-        required: [true, "Semester name is rquired"],
+        required: [true, "Semester is rquired"],
     },
     department: {
         type: Schema.Types.ObjectId,
