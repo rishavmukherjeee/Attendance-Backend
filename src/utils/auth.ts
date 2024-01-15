@@ -3,12 +3,12 @@ import { IStudent } from "../models/student.model";
 import { ITeacher } from "../models/teacher.model";
 
 export interface IToken {
-    token: string;
+    id: string;
 }
 
 const generateToken = (user: IStudent | ITeacher): string => {
     return jwt.sign(
-        { id: user._id, email: user.email, role: (user as ITeacher).role ? (user as ITeacher).role : "" },
+        { id: user._id, isAdmin: (user as ITeacher).isAdmin, email: user.email, role: (user as ITeacher).role ? (user as ITeacher).role : "" },
         process.env.JWT_SECRET as jwt.Secret,
         {
             expiresIn: process.env.EXPIRES_IN
