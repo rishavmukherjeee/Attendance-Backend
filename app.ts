@@ -50,6 +50,7 @@ else {
     // errorHandler for only produnction environment
     const errorHandlerProd: ErrorRequestHandler = (err, req: Request, res: Response, next: NextFunction) => {
         res.status(err.statusCode).json({
+            status: err.statusCode,
             message: err.message
         });
     }
