@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import Student, { IStudent } from "../models/student.model";
 import Teacher, { ITeacher } from "../models/teacher.model";
 import AppError from "../utils/app-error";
-import { generateToken } from "../utils/auth";
+import { IToken, generateToken } from "../utils/auth";
+import catchAsync from "../utils/catchAsync";
 
 const studentRegistration = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -87,4 +88,22 @@ const teacherLogin = async (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
-export { studentLogin, teacherLogin, teacherRegistration, studentRegistration }
+const getTeacher = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
+    try {
+        const teacher = await Teacher.findById(req.user.id).select("-password -__v -_id -createdAt -updatedAt")
+        res.status(200).json(teacher)
+    } catch (error) {
+        next(new AppError(error.message, 500))
+    }
+}
+
+const getStudent = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
+    try {
+        const student = await Student.findById(req.user.id).select("-password -__v -_id -createdAt -updatedAt")
+        res.status(200).json(student)
+    } catch (error) {
+        next(new AppError(error.message, 500))
+    }
+}
+
+export { studentLogin, teacherLogin, teacherRegistration, studentRegistration, getStudent, getTeacher }

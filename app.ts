@@ -49,8 +49,8 @@ if (process.env.NODE_ENV === 'dev') {
 else {
     // errorHandler for only produnction environment
     const errorHandlerProd: ErrorRequestHandler = (err, req: Request, res: Response, next: NextFunction) => {
-        res.status(500).json({
-            message: 'something went wrong'
+        res.status(err.statusCode).json({
+            message: err.message
         });
     }
     app.use(errorHandlerProd)
