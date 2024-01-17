@@ -1,24 +1,30 @@
 import { Document, Schema, model } from 'mongoose';
 
 export interface IClass extends Document {
-    classId: string;
-    date: Date;
+    className: string;
     department: Schema.Types.ObjectId;
     section: Schema.Types.ObjectId;
     semester: Schema.Types.ObjectId;
     subject: Schema.Types.ObjectId;
-    attendances: Schema.Types.ObjectId[];
+    time: Date;
+    day: string[];
 }
 
 const classSchema = new Schema<IClass>({
-    classId: {
+    className: {
         type: String,
         required: [true, "Class id is required"],
     },
-    date: {
+    time: {
         type: Date,
-        required: [true, "Date is required"],
+        required: true
     },
+    day: [
+        {
+            type: String,
+            required: true
+        }
+    ],
     department: {
         type: Schema.Types.ObjectId,
         ref: "Department",
@@ -27,7 +33,6 @@ const classSchema = new Schema<IClass>({
     section: {
         type: Schema.Types.ObjectId,
         ref: "Section",
-        required: true,
     },
     semester: {
         type: Schema.Types.ObjectId,
@@ -38,19 +43,13 @@ const classSchema = new Schema<IClass>({
         type: Schema.Types.ObjectId,
         ref: "Subject",
         required: true,
-    },
-    attendances: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Attendance",
-        },
-    ],
+    }
 }, {
     timestamps: true,
 });
 
-classSchema.index({ date: 1 });
+classSchema.index({ className: 1 });
 
-const classModel = model("Class", classSchema);
+const Class = model("Class", classSchema);
 
-export default classModel;
+export default Class;

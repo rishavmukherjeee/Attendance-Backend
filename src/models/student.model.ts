@@ -38,10 +38,6 @@ const studentSchema = new Schema<IStudent>({
         type: Date,
         required: [true, "Date of birth is required"],
     },
-    // age: {
-    //     type: Number,
-    //     required: [true, "Age is required"],
-    // },
     email: {
         type: String,
         required: [true, "Email is required"],
