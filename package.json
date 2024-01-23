@@ -11,9 +11,6 @@
     "postinstall": "tsc",
     "build": "tsc"
   },
-  "engines": {
-    "node": "18.x"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
