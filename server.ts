@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8090
 
 const dbConnect = async () => {
     try {
-        await connect(process.env.DATABASE_TEST, {})
+        await connect(process.env.DATABASE_PROD, {})
         console.log("DB connected")
     } catch (error) {
         console.log(error)
