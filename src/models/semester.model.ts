@@ -3,22 +3,20 @@ import { Schema, Document, model } from "mongoose";
 import Department from "./department.model";
 
 export interface ISemester extends Document {
-    name: number;
-    department: Schema.Types.ObjectId;
+    sem: number;
     session: Schema.Types.ObjectId;
     section: Schema.Types.ObjectId[];
     subjects: Schema.Types.ObjectId[];
-    strength: number;
 }
 
-const semesterSchema = new Schema<ISemester>({
-    name: {
+export const semesterSchema = new Schema<ISemester>({
+    sem: {
         type: Number,
         required: [true, "Semester is rquired"],
     },
-    department: {
+    session: {
         type: Schema.Types.ObjectId,
-        ref: "Department",
+        ref: "Session",
         required: true
     },
     subjects: [
@@ -26,22 +24,7 @@ const semesterSchema = new Schema<ISemester>({
             type: Schema.Types.ObjectId,
             ref: "Subject"
         }
-    ],
-    section: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Section",
-        }
-    ],
-    strength: {
-        type: Number,
-        default: 0
-    },
-    session: {
-        type: Schema.Types.ObjectId,
-        ref: "Session",
-        required: true
-    }
+    ]
 },
     {
         timestamps: true

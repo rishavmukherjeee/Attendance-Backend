@@ -11,7 +11,7 @@ export interface ITeacher extends Document {
     phone: Number;
     address: string;
     password: string;
-    subjects: Schema.Types.ObjectId[];
+    assignedClasses: Schema.Types.ObjectId[];
     department: Schema.Types.ObjectId;
     role: string;
     status: string;
@@ -71,12 +71,12 @@ const teacherSchema = new Schema<ITeacher>({
     password: {
         type: String,
         required: [true, "password is required"],
-        minlength: 8
+        minlength: 8,
     },
-    subjects: [
+    assignedClasses: [
         {
             type: Schema.Types.ObjectId,
-            ref: "Subject"
+            ref: "Class"
         }
     ],
     role: {
@@ -107,6 +107,11 @@ teacherSchema.pre<ITeacher>('save', async function (next: NextFunction) {
     if (!this.isModified("password")) return next()
     const hashPassword = await bcrypt.hash(this.password, 10)
     this.password = hashPassword
+    next()
+})
+
+teacherSchema.pre<ITeacher>(/^find/, function (next: NextFunction) {
+    this.populate({ path: "assignedClasses", select: "-__v -createdAt -updatedAt" })
     next()
 })
 

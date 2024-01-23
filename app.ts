@@ -1,17 +1,32 @@
 import express, { NextFunction, Request, Response } from "express";
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import path from 'path';
 import morgan from "morgan";
 import { ErrorRequestHandler } from "express";
-import accountRouter from "./src/routes/accounts.route"
+import teacherRouter from "./src/routes/account/teacher.route"
+import studentRouter from "./src/routes/account/student.route"
 import departmentRouter from "./src/routes/department.route"
 import semesterRouter from "./src/routes/semester.route"
 import sessionRouter from "./src/routes/session.route"
 import subjectRouter from "./src/routes/subject.route"
 import sectionRouter from "./src/routes/section.route"
+import classRouter from "./src/routes/class.route"
+import attendanceRouter from "./src/routes/attendance.route"
+import swaggerDefinition from './swagger.json'
 
 const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json())
+app.use(express.static(path.resolve(__dirname, "public")))
+
+const options = {
+    swaggerDefinition,
+    apis: [path.resolve(__dirname, './**/*.ts')]
+};
+const swaggerSpec = swaggerJSDoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -23,12 +38,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 if (process.argv[2] === '--dev') process.env.NODE_ENV = 'dev'
 else process.env.NODE_ENV = 'prod'
 
-app.use('/api/v2/auth', accountRouter)
+app.use('/api/v2/auth/teacher', teacherRouter)
+app.use('/api/v2/auth/student', studentRouter)
 app.use('/api/v2/department', departmentRouter)
 app.use('/api/v2/semester', semesterRouter)
 app.use('/api/v2/session', sessionRouter)
 app.use('/api/v2/subject', subjectRouter)
 app.use('/api/v2/section', sectionRouter)
+app.use('/api/v2/class', classRouter)
+app.use('/api/v2/attendance', attendanceRouter)
 
 app.get('/', (req, res) => {
     res.send("hello")

@@ -1,0 +1,23 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Attendance API",
+      "version": "1.0.0",
+      "description": "attendance system"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8090/api/v2/"
+      }
+    ],
+    "paths": {},
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+}

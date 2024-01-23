@@ -1,16 +1,17 @@
 import { NextFunction } from "express";
 import { Schema, Document, model } from "mongoose";
+import { ISession, sessionSchema } from "./session.model";
 
 export interface IDepartment extends Document {
     name: string;
     description: string;
     shortName: string;
+    session: ISession;
     subjects: Schema.Types.ObjectId[];
-    semesters: Schema.Types.ObjectId[];
     faculties: Schema.Types.ObjectId[];
 }
 
-const departmentSchema = new Schema<IDepartment>({
+export const departmentSchema = new Schema<IDepartment>({
     name: {
         type: String,
         minlength: 4,
@@ -30,12 +31,6 @@ const departmentSchema = new Schema<IDepartment>({
         {
             type: Schema.Types.ObjectId,
             ref: "Subject"
-        }
-    ],
-    semesters: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Semester"
         }
     ],
     faculties: [

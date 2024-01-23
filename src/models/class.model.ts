@@ -1,56 +1,67 @@
 import { Document, Schema, model } from 'mongoose';
+import { IDepartment, departmentSchema } from './department.model';
+import { ISection, sectionSchema } from './section.model';
+import { ISubject, subjectSchema } from './subject.model';
+import { ISemester, semesterSchema } from './semester.model';
 
 export interface IClass extends Document {
-    classId: string;
-    date: Date;
-    department: Schema.Types.ObjectId;
-    section: Schema.Types.ObjectId;
-    semester: Schema.Types.ObjectId;
-    subject: Schema.Types.ObjectId;
-    attendances: Schema.Types.ObjectId[];
+    className: string;
+    department: {
+        name: string;
+        shortName: string;
+    };
+    totalClass: number;
+    section: ISection;
+    semester: ISemester;
+    subject: ISubject;
+    time: String;
+    day: string[];
 }
 
-const classSchema = new Schema<IClass>({
-    classId: {
+export const classSchema = new Schema<IClass>({
+    className: {
         type: String,
-        required: [true, "Class id is required"],
+        required: [true, "Class name is required"],
     },
-    date: {
-        type: Date,
-        required: [true, "Date is required"],
+    time: {
+        type: String,
+        required: true
     },
+    day: [
+        {
+            type: String,
+        }
+    ],
     department: {
-        type: Schema.Types.ObjectId,
-        ref: "Department",
-        required: true,
+        name: {
+            type: String
+        },
+        shortName: {
+            type: String
+        }
     },
     section: {
-        type: Schema.Types.ObjectId,
-        ref: "Section",
-        required: true,
+        type: String,
+        required: true
     },
     semester: {
-        type: Schema.Types.ObjectId,
-        ref: "Semester",
+        type: Number,
         required: true,
     },
     subject: {
-        type: Schema.Types.ObjectId,
-        ref: "Subject",
+        type: String,
         required: true,
     },
-    attendances: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Attendance",
-        },
-    ],
+    totalClass: {
+        type: Number,
+        default: 0
+    }
 }, {
     timestamps: true,
 });
 
-classSchema.index({ date: 1 });
+classSchema.index({ className: 1 });
 
-const classModel = model("Class", classSchema);
+const Class = model("Class", classSchema);
 
-export default classModel;
+export default Class;
