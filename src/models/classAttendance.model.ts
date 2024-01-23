@@ -1,16 +1,16 @@
 import { Document, Schema, model } from 'mongoose';
 
 export interface IClassAttendance extends Document {
-    classId: Schema.Types.ObjectId;
+    classInfo: Schema.Types.ObjectId;
     Date: Date;
+    // subject: string;
     attendance: Schema.Types.ObjectId[];
 }
 
 const classAttendanceSchema = new Schema<IClassAttendance>({
-    classId: {
+    classInfo: {
         type: Schema.Types.ObjectId,
-        ref: "Class",
-        required: [true, "Class id is required"],
+        ref: "Class"
     },
     Date: {
         type: Date,
@@ -28,6 +28,6 @@ const classAttendanceSchema = new Schema<IClassAttendance>({
 
 classAttendanceSchema.index({ date: 1 });
 
-const classAttendanceModel = model("ClassAttendance", classAttendanceSchema);
+const ClassAttendance = model("ClassAttendance", classAttendanceSchema);
 
-export default classAttendanceModel;
+export default ClassAttendance;

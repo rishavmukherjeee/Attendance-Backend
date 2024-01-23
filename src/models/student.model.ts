@@ -12,9 +12,9 @@ export interface IStudent extends Document {
     rollno: number;
     password: string;
     enrollmentType: string;
-    subjects: Schema.Types.ObjectId[];
+    currentSemester: number;
     session: Schema.Types.ObjectId;
-    section: string | Schema.Types.ObjectId;
+    section: string;
     attendance: Schema.Types.ObjectId[];
     isPasswordValid: (password: string) => Promise<Error | boolean>
 }
@@ -59,8 +59,8 @@ const studentSchema = new Schema<IStudent>({
     },
     address: {
         type: String,
-        required: [true, "Address is required"],
         trim: true,
+        default: ""
     },
     rollno: {
         type: Number,
@@ -77,19 +77,18 @@ const studentSchema = new Schema<IStudent>({
         required: [true, "password is required"],
         minlength: 8
     },
-    subjects: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Subject"
-        }
-    ],
     session: {
         type: Schema.Types.ObjectId,
-        ref: "Session"
+        ref: "Session",
+        required: true
     },
     section: {
-        type: Schema.Types.ObjectId,
-        ref: "Section",
+        type: String,
+        required: true
+    },
+    currentSemester: {
+        type: Number,
+        required: true,
     },
     attendance: [
         {
@@ -107,6 +106,12 @@ studentSchema.pre<IStudent>('save', async function (next: NextFunction) {
     if (!this.isModified("password")) return next()
     const hashPassword = await bcrypt.hash(this.password, 10)
     this.password = hashPassword
+    next()
+})
+
+studentSchema.pre<IStudent>(/^find/, function (next: NextFunction) {
+    this.populate({ path: "session", select: "from to stream" })
+    this.populate({ path: "section", select: " name strength" })
     next()
 })
 

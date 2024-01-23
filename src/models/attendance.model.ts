@@ -1,16 +1,16 @@
 import { Schema, Document, model } from "mongoose";
+import Class from "./class.model";
 
 export interface IAttendance extends Document {
     student: Schema.Types.ObjectId;
-    subject: Schema.Types.ObjectId;
-    date: Date;
+    classInfo: Schema.Types.ObjectId;
     isPresent: boolean;
 }
 
 const attendanceSchema = new Schema<IAttendance>(
     {
+        classInfo: { type: Schema.Types.ObjectId, ref: 'Class', required: true },
         student: { type: Schema.Types.ObjectId, ref: 'Student', required: true },
-        date: { type: Date, required: true },
         isPresent: { type: Boolean, default: false },
     },
     {

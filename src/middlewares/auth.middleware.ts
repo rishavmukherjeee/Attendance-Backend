@@ -48,7 +48,7 @@ const isFaculty = async (
     res: Response,
     next: NextFunction
 ) => {
-    if (req.user.role !== 'HOD' && req.user.role !== 'DIRECTOR') {
+    if (req.user.role !== "FACULTY") {
         res.status(401).json({ message: 'not authorized' })
         return
     }
@@ -60,7 +60,7 @@ const isStudent = async (
     res: Response,
     next: NextFunction
 ) => {
-    if (req.user.role !== '') {
+    if (req.user.role) {
         res.status(401).json({ message: 'not authorized' })
         return
     }

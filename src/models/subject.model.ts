@@ -7,7 +7,7 @@ export interface ISubject extends Document {
     credit_points: number;
 }
 
-const subjectSchema = new Schema<ISubject>({
+export const subjectSchema = new Schema<ISubject>({
     name: {
         type: String,
         minlength: 4,

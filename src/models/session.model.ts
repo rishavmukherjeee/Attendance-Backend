@@ -9,7 +9,7 @@ export interface ISession extends Document {
     course: string;
 }
 
-const sessionSchema = new Schema<ISession>({
+export const sessionSchema = new Schema<ISession>({
     from: {
         type: Number,
         default: new Date().getFullYear(),

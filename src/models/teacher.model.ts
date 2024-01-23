@@ -110,6 +110,11 @@ teacherSchema.pre<ITeacher>('save', async function (next: NextFunction) {
     next()
 })
 
+teacherSchema.pre<ITeacher>(/^find/, function (next: NextFunction) {
+    this.populate({ path: "assignedClasses", select: "-__v -createdAt -updatedAt" })
+    next()
+})
+
 teacherSchema.methods.isPasswordValid = async function (password: ITeacher['password']): Promise<Error | boolean> {
     return await bcrypt.compare(password, this.password)
 }

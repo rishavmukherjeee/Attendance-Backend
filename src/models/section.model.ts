@@ -4,12 +4,11 @@ import { Schema, Document, model } from "mongoose";
 export interface ISection extends Document {
     name: string;
     students: Schema.Types.ObjectId[];
-    department: Schema.Types.ObjectId;
-    semester: Schema.Types.ObjectId;
+    session: Schema.Types.ObjectId;
     strength: number;
 }
 
-const sectionSchema = new Schema<ISection>({
+export const sectionSchema = new Schema<ISection>({
     name: {
         type: String,
         required: [true, "section name is rquired"],
@@ -20,15 +19,10 @@ const sectionSchema = new Schema<ISection>({
             ref: "Student",
         }
     ],
-    department: {
+    session: {
         type: Schema.Types.ObjectId,
-        ref: "Department",
-        required: true
-    },
-    semester: {
-        type: Schema.Types.ObjectId,
-        ref: "Semester",
-        required: true
+        ref: "Session",
+        required:true
     },
     strength: {
         type: Number,
@@ -40,8 +34,8 @@ const sectionSchema = new Schema<ISection>({
     }
 );
 
-sectionSchema.pre<ISection>("save", async function(next: NextFunction) {
-    if(this.isModified("students")) {
+sectionSchema.pre<ISection>("save", async function (next: NextFunction) {
+    if (this.isModified("students")) {
         this.strength = this.students.length;
     }
     next();
