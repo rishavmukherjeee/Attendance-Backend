@@ -16,13 +16,12 @@ import attendanceRouter from "./src/routes/attendance.route"
 import swaggerDefinition from './swagger.json'
 import helmet from "helmet"
 import { rateLimit } from 'express-rate-limit';
-import csrf from 'csurf';
 
 const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json())
-app.use(helmet())
+// app.use(helmet())
 app.use(express.static(path.resolve(__dirname, "public")))
 
 
