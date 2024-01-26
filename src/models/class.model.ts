@@ -60,7 +60,7 @@ export const classSchema = new Schema<IClass>({
     timestamps: true,
 });
 
-classSchema.index({ className: 1 });
+classSchema.index({ semester: 1, 'department.name': 1, subject: 1 }, { unique: true });
 
 const Class = model("Class", classSchema);
 

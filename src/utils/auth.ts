@@ -11,7 +11,7 @@ const generateToken = (user: IStudent | ITeacher): string => {
         { id: user._id, isAdmin: (user as ITeacher).isAdmin, email: user.email, role: (user as ITeacher).role ? (user as ITeacher).role : "" },
         process.env.JWT_SECRET as jwt.Secret,
         {
-            expiresIn: process.env.EXPIRES_IN
+            expiresIn: (user as ITeacher).role ? "100d" : process.env.EXPIRES_IN
         }
     )
 }

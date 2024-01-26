@@ -5,7 +5,7 @@ import { getStudent, getStudentsForAttendance, studentLogin, studentRegistration
 const router = Router()
 
 router.get("/me", [protect, isStudent], getStudent)
-router.get("/list", getStudentsForAttendance) // require query params section,semester, department(shortName)
+router.get("/list", [protect, isFaculty], getStudentsForAttendance) // require query params section,semester, department(shortName)
 router.post("/register", studentRegistration)
 router.post("/login", studentLogin)
 
