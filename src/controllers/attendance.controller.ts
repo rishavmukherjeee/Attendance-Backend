@@ -4,7 +4,6 @@ import { IToken } from '../utils/auth';
 import ClassAttendance from '../models/classAttendance.model';
 import AppError from '../utils/app-error';
 import Class from '../models/class.model';
-import mongoose from 'mongoose';
 
 const createAttendance = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
     try {
@@ -56,7 +55,7 @@ const generateReport = async (req: Request, res: Response, next: NextFunction) =
         let startDate = new Date(req.query.startDate as string)
         let endDate = new Date(req.query.endDate as string)
         if (!semester || !department || !section) return next(new AppError('query missing or invalid', 400))
-        if (!endDate) endDate = new Date
+        if (!req.query.endDate) endDate = new Date
         if (startDate >= endDate) return next(new AppError("start date cannot be equal ot greater to end date", 400))
         let totalSubjectWiseClassConducted = {}
         const classData = await ClassAttendance.aggregate([

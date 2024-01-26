@@ -14,17 +14,32 @@ import sectionRouter from "./src/routes/section.route"
 import classRouter from "./src/routes/class.route"
 import attendanceRouter from "./src/routes/attendance.route"
 import swaggerDefinition from './swagger.json'
+import helmet from "helmet"
+import { rateLimit } from 'express-rate-limit';
+import csrf from 'csurf';
 
 const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json())
+app.use(helmet())
 app.use(express.static(path.resolve(__dirname, "public")))
+
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
 
 const options = {
     swaggerDefinition,
     apis: [path.resolve(__dirname, './**/*.ts')]
 };
+
+// Apply rate limiting middleware
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 50, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+});
+
 const swaggerSpec = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
@@ -46,7 +61,7 @@ app.use('/api/v2/session', sessionRouter)
 app.use('/api/v2/subject', subjectRouter)
 app.use('/api/v2/section', sectionRouter)
 app.use('/api/v2/class', classRouter)
-app.use('/api/v2/attendance', attendanceRouter)
+app.use('/api/v2/attendance', [limiter], attendanceRouter)
 
 app.get('/', (req, res) => {
     res.send("hello")
