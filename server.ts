@@ -8,9 +8,11 @@ dotenv.config()
 const server = http.createServer(app)
 const PORT = process.env.PORT || 8090
 
+const DB_URL = process.env.NODE_ENV === "dev" ? process.env.DATABASE_TEST : process.env.DATABASE_PROD
+
 const dbConnect = async () => {
     try {
-        await connect(process.env.DATABASE_PROD, {})
+        await connect(DB_URL, {})
         console.log("DB connected")
     } catch (error) {
         console.log(error)

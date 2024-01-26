@@ -19,7 +19,7 @@ const attendanceSchema = new Schema<IAttendance>(
 );
 
 // Add an index on the 'date' field for future documents
-attendanceSchema.index({ date: 1 });
+attendanceSchema.index({ 'classInfo.subject': 1, 'classInfo.semester': 1, 'classInfo.department.shortName': 1, 'classInfo.section': 1 });
 
 const Attendance = model('Attendance', attendanceSchema);
 

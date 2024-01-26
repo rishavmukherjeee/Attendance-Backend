@@ -32,10 +32,6 @@ const getClassById = async (req: Request, res: Response, next: NextFunction) => 
     try {
         const classId: string = req.params.id
         const oneClass: IClass[] = await Class.findById(classId)
-            .populate({path:'department',select:"-_id name shortName"})
-            .populate({path:'section',select:"-_id name"})
-            .populate({path:'semester',select:"-_id name"})
-            .populate({path:'subject',select:"-_id name"});
         if (!oneClass) return next(new AppError("class not found", 404))
         res.status(200).json(oneClass)
     } catch (error) {

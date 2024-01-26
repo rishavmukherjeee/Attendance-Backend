@@ -38,5 +38,171 @@ const createAttendance = async (req: Request & { user: IToken }, res: Response, 
     }
 }
 
+const getAttendanceList = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
+    try {
+        const classId = req.params.id
+        const classAttendance = await ClassAttendance.find({ classInfo: classId }).sort({ createdAt: -1 }).select("attendance -_id Date").populate({ path: 'attendance', select: " student isPresent" })
+        if (!classAttendance) return next(new AppError("Not found", 404))
+        res.status(200).json(classAttendance)
+    } catch (error) {
+        return next(new AppError(error.message, error.status))
+    }
+}
 
-export { createAttendance }
+const generateReport = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { semester, department, section } = req.query
+        let startDate = new Date(req.query.startDate as string)
+        let endDate = new Date(req.query.endDate as string)
+        if (!semester || !department || !section) return next(new AppError('query missing or invalid', 400))
+        if (!req.query.endDate) endDate = new Date
+        if (startDate >= endDate) return next(new AppError("start date cannot be equal ot greater to end date", 400))
+        let totalSubjectWiseClassConducted = {}
+        const classData = await ClassAttendance.aggregate([
+            {
+                $match: {
+                    Date: { $gte: startDate, $lte: endDate }
+                }
+            },
+            {
+                $lookup: {
+                    from: "classes",
+                    localField: 'classInfo',
+                    foreignField: '_id',
+                    as: "classDetails"
+                }
+            },
+            {
+                $unwind: "$classDetails"
+            },
+            {
+                $match: {
+                    'classDetails.department.shortName': department,
+                    'classDetails.section': section,
+                    'classDetails.semester': parseInt(String(semester))
+                }
+            },
+            {
+                $group: {
+                    _id: { classId: "$classDetails._id", subject: "$classDetails.subject" },
+                    count: { $sum: 1 }
+                }
+            }
+        ])
+        classData.map((data) => {
+            const subject = data._id.subject
+            return totalSubjectWiseClassConducted[subject] = { classId: data._id.classId, count: data.count }
+        })
+        // const result = Promise.all(classData.map(async (data) => {
+
+        const processedData = await Attendance.aggregate([
+            {
+                $match: {
+                    updatedAt: { $gte: startDate, $lte: endDate }
+                }
+            },
+            {
+                $lookup: {
+                    from: "students",
+                    localField: "student",
+                    foreignField: "_id",
+                    as: "studentDetails"
+                }
+            },
+            {
+                $unwind: "$studentDetails"
+            },
+            {
+                $lookup: {
+                    from: "classes",
+                    localField: "classInfo",
+                    foreignField: "_id",
+                    as: "classDetails"
+                }
+            },
+            {
+                $unwind: "$classDetails"
+            },
+            {
+                $group: {
+                    _id: {
+                        studentId: "$studentDetails._id",
+                        studentName: "$studentDetails.name",
+                        subject: "$classDetails.subject",
+                    },
+                    totalAttendance: { $sum: { $cond: { if: "$isPresent", then: 1, else: 0 } } },
+                    totalClasses: {
+                        $sum: {
+                            $cond: {
+                                if: {
+                                    $in: [
+                                        "$classDetails.subject",
+                                        Object.keys(totalSubjectWiseClassConducted)
+                                    ]
+                                },
+                                then: {
+                                    $let: {
+                                        vars: {
+                                            subjectData: {
+                                                $arrayElemAt: [
+                                                    {
+                                                        $filter: {
+                                                            input: {
+                                                                $objectToArray: totalSubjectWiseClassConducted
+                                                            },
+                                                            cond: {
+                                                                $eq: ["$$this.k", "$classDetails.subject"]
+                                                            }
+                                                        }
+                                                    },
+                                                    0
+                                                ]
+                                            }
+                                        },
+                                        in: "$$subjectData.v.count"
+                                    }
+                                },
+                                else: 0
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        studentId: "$_id.studentId",
+                        studentName: "$_id.studentName",
+                    },
+                    subjects: {
+                        $push: {
+                            subject: "$_id.subject",
+                            overallAverageAttendance: {
+                                $round: {
+                                    $multiply: [{ $divide: ["$totalAttendance", "$totalClasses"] }, 100]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    studentId: "$_id.studentId",
+                    studentName: "$_id.studentName",
+                    subjects: 1
+                }
+            }
+        ]);
+        // return processedData
+        // }))
+
+        if (!Class) return next(new AppError("Not found", 404))
+        res.status(200).json(processedData)
+    } catch (error) {
+        return next(new AppError(error.message, error.status))
+    }
+}
+
+export { createAttendance, getAttendanceList, generateReport }

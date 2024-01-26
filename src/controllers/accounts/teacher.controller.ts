@@ -68,7 +68,7 @@ const unAssignedClassToTeacher = async (req: Request & { user: IToken }, res: Re
         const match = classToUnAssigned.some((val: string) => preAssignedClassesStringArray.includes(val))
         if (!match) return next(new AppError("some classes are not found", 403))
         const teacher: ITeacher = await Teacher.findByIdAndUpdate(req.user.id, { $pullAll: { assignedClasses: [...classToUnAssigned] } }, { new: true }).select('assignedClasses')
-        if (!teacher) return next(new AppError("something terrible happened", 500))
+        if (!teacher) return next(new AppError("something wrong happened", 500))
         res.status(200).json(teacher)
     } catch (error) {
         next(new AppError(error.message, 400))
@@ -77,7 +77,7 @@ const unAssignedClassToTeacher = async (req: Request & { user: IToken }, res: Re
 
 const getTeacher = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
     try {
-        const teacher = await Teacher.findById(req.user.id).select("-password -__v -_id -createdAt -updatedAt")
+        const teacher = await (await Teacher.findById(req.user.id).select("-password -__v -_id -createdAt -updatedAt")).depopulate('assignedClasses')
         res.status(200).json(teacher)
     } catch (error) {
         next(new AppError(error.message, 500))
