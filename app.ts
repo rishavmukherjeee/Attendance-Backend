@@ -25,8 +25,6 @@ app.use(express.json())
 app.use(helmet())
 app.use(express.static(path.resolve(__dirname, "public")))
 
-const csrfProtection = csrf({ cookie: true });
-app.use(csrfProtection);
 
 const options = {
     swaggerDefinition,
