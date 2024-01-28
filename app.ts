@@ -41,10 +41,16 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
+    res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin (replace * with your specific origin if known)
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE'); // Allow specified HTTP methods
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specified headers
+
+    // Handle preflight requests (OPTIONS method)
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
 });
 
 if (process.argv[2] === '--dev') process.env.NODE_ENV = 'dev'
