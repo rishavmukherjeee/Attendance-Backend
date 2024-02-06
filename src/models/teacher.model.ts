@@ -11,6 +11,7 @@ export interface ITeacher extends Document {
     phone: Number;
     address: string;
     password: string;
+    subjects: Schema.Types.ObjectId[];
     assignedClasses: Schema.Types.ObjectId[];
     department: Schema.Types.ObjectId;
     role: string;
@@ -73,6 +74,12 @@ const teacherSchema = new Schema<ITeacher>({
         required: [true, "password is required"],
         minlength: 8,
     },
+    subjects: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Subject"
+        }
+    ],
     assignedClasses: [
         {
             type: Schema.Types.ObjectId,

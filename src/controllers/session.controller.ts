@@ -26,6 +26,19 @@ const getSessionById = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
+const getSessionByDepartment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = req.params.dept
+        const sessions: ISession[] = await Session.findOne({ stream: id })
+        if (!sessions) {
+            return next(new AppError("sessions not found", 404));
+        }
+        res.status(200).json({ sessions });
+    } catch (error) {
+        next(new AppError(error?.message, 400));
+    }
+}
+
 const getAllSession = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const sessions: ISession[] = await Session.find();
@@ -35,4 +48,4 @@ const getAllSession = async (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
-export { createSession, getAllSession, getSessionById }
+export { createSession, getAllSession, getSessionById, getSessionByDepartment }
