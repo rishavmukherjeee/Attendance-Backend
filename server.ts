@@ -13,7 +13,7 @@ const DB_URL = process.env.NODE_ENV === "dev" ? process.env.DATABASE_TEST : proc
 const dbConnect = async () => {
     try {
         await connect(DB_URL, {})
-        console.log("DB connected")
+        console.log(`${process.env.NODE_ENV} DB connected`)
     } catch (error) {
         console.log(error)
     }
