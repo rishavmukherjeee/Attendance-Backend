@@ -29,7 +29,7 @@ const getSessionById = async (req: Request, res: Response, next: NextFunction) =
 const getSessionByDepartment = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.dept
-        const sessions: ISession[] = await Session.findOne({ stream: id })
+        const sessions: ISession[] = await Session.find({ stream: id })
         if (!sessions) {
             return next(new AppError("sessions not found", 404));
         }
