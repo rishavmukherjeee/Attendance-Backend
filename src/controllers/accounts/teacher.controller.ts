@@ -83,6 +83,15 @@ const getTeacher = async (req: Request & { user: IToken }, res: Response, next: 
         next(new AppError(error.message, 500))
     }
 }
+const getAllTeacher = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
+    try {
+        const teachers = await Teacher.find().select("-password -__v -createdAt -updatedAt")
+        if (!teachers) return next(new AppError('No teachers found', 404))
+        res.status(200).json(teachers)
+    } catch (error) {
+        next(new AppError(error.message, 500))
+    }
+}
 
 const updateTeacherDetails = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
     try {
@@ -94,4 +103,4 @@ const updateTeacherDetails = async (req: Request & { user: IToken }, res: Respon
     }
 }
 
-export { teacherLogin, teacherRegistration, getTeacher, assignedClassToTeacher, unAssignedClassToTeacher }
+export { teacherLogin, teacherRegistration, getTeacher, assignedClassToTeacher, unAssignedClassToTeacher, getAllTeacher }

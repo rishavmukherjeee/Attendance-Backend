@@ -7,7 +7,7 @@ router.post("/addNew", createSubject);
 
 router.route("/:id")
       .get(getSubjectById)
-      //.put(editSubjectById)
+      .put(editSubjectById)
       .delete(deleteSubjectById);
 
 export default router;

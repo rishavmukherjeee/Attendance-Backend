@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getTeacher, assignedClassToTeacher, teacherLogin, teacherRegistration, unAssignedClassToTeacher } from "../../controllers/accounts/teacher.controller";
+import { getTeacher, assignedClassToTeacher, teacherLogin, teacherRegistration, unAssignedClassToTeacher, getAllTeacher } from "../../controllers/accounts/teacher.controller";
 import { isAdmin, isFaculty, isStudent, protect } from "../../middlewares/auth.middleware";
 
 const router = Router()
@@ -49,6 +49,7 @@ const router = Router()
  *         description: Internal server error
  */
 
+router.get('/getAll', [protect, isAdmin], getAllTeacher)
 router.get("/me", [protect], getTeacher)
 router.post("/register", teacherRegistration)
 router.post("/login", teacherLogin)

@@ -13,7 +13,7 @@ export interface ITeacher extends Document {
     password: string;
     subjects: Schema.Types.ObjectId[];
     assignedClasses: Schema.Types.ObjectId[];
-    department: Schema.Types.ObjectId;
+    department: string;
     role: string;
     status: string;
     isAdmin: boolean,
@@ -101,8 +101,8 @@ const teacherSchema = new Schema<ITeacher>({
         default: "PENDING"
     },
     department: {
-        type: Schema.Types.ObjectId,
-        ref: "Department"
+        type: String,
+        required: true
     }
 },
     {
