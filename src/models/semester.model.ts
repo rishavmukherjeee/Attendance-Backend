@@ -12,7 +12,7 @@ export interface ISemester extends Document {
 export const semesterSchema = new Schema<ISemester>({
     sem: {
         type: Number,
-        required: [true, "Semester is rquired"],
+        default: 1
     },
     session: {
         type: Schema.Types.ObjectId,

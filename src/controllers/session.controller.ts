@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from "express"
 import Session, { ISession } from "../models/session.model";
 import AppError from "../utils/app-error";
+import Semester from "../models/semester.model";
 
 const createSession = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const session: ISession = new Session({ ...req.body });
         await session.save();
-        res.status(201).json({ session });
+        const semester = await new Semester({ session: session.id }).save()
+        res.status(201).json({ session, semester });
     }
     catch (error) {
         next(new AppError(`${error.message}`, 400))
