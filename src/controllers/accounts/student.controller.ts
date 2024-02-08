@@ -52,57 +52,6 @@ const searchStudents = async ({
     }
 }
 
-const getStudentsForAttendance = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { section, department, semester } = req.query
-        console.log(req.query)
-        const students = await Student.aggregate([
-            {
-                $match: {
-                    currentSemester: parseInt(String(semester)),
-                    section: section
-                },
-            },
-            {
-                $lookup: {
-                    from: 'sessions', // Name of the Session collection
-                    localField: 'session',
-                    foreignField: '_id',
-                    as: 'sessionData',
-                },
-            },
-            {
-                $unwind: '$sessionData', // Unwind to access the 'stream' field
-            },
-            {
-                $lookup: {
-                    from: 'departments', // Assuming 'streams' is the name of the collection for the 'stream' field
-                    localField: 'sessionData.stream',
-                    foreignField: '_id',
-                    as: 'streamData',
-                },
-            },
-            {
-                $match: {
-                    'streamData.shortName': department,
-                },
-            },
-            {
-                $project: {
-                    _id: 1,
-                    firstname: 1,
-                    lastname: 1,
-                    rollno: 1
-                },
-            },
-        ]);
-
-        res.status(200).json(students)
-    } catch (error) {
-        next(new AppError(`${error.message}`, 400))
-    }
-}
-
 const studentLogin = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body
@@ -140,4 +89,4 @@ const getStudent = async (req: Request & { user: IToken }, res: Response, next: 
     }
 }
 
-export { getStudent, studentLogin, studentRegistration, getStudentsForAttendance }
+export { getStudent, studentLogin, studentRegistration }

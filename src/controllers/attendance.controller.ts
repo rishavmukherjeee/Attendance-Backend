@@ -4,6 +4,7 @@ import { IToken } from '../utils/auth';
 import ClassAttendance from '../models/classAttendance.model';
 import AppError from '../utils/app-error';
 import Class from '../models/class.model';
+import Student from '../models/student.model';
 
 const createAttendance = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
     try {
@@ -46,6 +47,34 @@ const getAttendanceList = async (req: Request & { user: IToken }, res: Response,
         res.status(200).json(classAttendance)
     } catch (error) {
         return next(new AppError(error.message, error.status))
+    }
+}
+
+const getStudentsForAttendance = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { section, department, semester } = req.query
+        console.log(req.query)
+        const students = await Student.aggregate([
+            {
+                $match: {
+                    currentSemester: parseInt(String(semester)),
+                    section: section,
+                    department: department
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    firstname: 1,
+                    lastname: 1,
+                    rollno: 1
+                },
+            },
+        ]);
+
+        res.status(200).json(students)
+    } catch (error) {
+        next(new AppError(`${error.message}`, 400))
     }
 }
 
@@ -205,4 +234,4 @@ const generateReport = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
-export { createAttendance, getAttendanceList, generateReport }
+export { createAttendance, getAttendanceList, generateReport, getStudentsForAttendance }
