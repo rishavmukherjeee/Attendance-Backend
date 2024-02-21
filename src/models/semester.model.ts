@@ -5,7 +5,6 @@ import Department from "./department.model";
 export interface ISemester extends Document {
     sem: number;
     session: Schema.Types.ObjectId;
-    section: Schema.Types.ObjectId[];
     subjects: Schema.Types.ObjectId[];
 }
 

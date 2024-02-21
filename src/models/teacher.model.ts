@@ -6,7 +6,7 @@ export interface ITeacher extends Document {
     firstname: string;
     lastname: string;
     teacherID: string;
-    age: number;
+    dob: Date;
     email: string;
     phone: Number;
     address: string;
@@ -41,8 +41,8 @@ const teacherSchema = new Schema<ITeacher>({
         maxlength: 10,
         required: true
     },
-    age: {
-        type: Number,
+    dob: {
+        type: Date,
         required: [true, "Age is required"],
     },
     email: {
@@ -121,6 +121,20 @@ teacherSchema.pre<ITeacher>(/^find/, function (next: NextFunction) {
     this.populate({ path: "assignedClasses", select: "-__v -createdAt -updatedAt" })
     next()
 })
+
+teacherSchema.virtual("age").get(function () {
+    if (this.dob) {
+        const today = new Date();
+        const birthDate = new Date(this.dob);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+    return undefined;
+});
 
 teacherSchema.methods.isPasswordValid = async function (password: ITeacher['password']): Promise<Error | boolean> {
     return await bcrypt.compare(password, this.password)
