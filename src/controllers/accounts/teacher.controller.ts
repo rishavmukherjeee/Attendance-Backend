@@ -77,7 +77,7 @@ const unAssignedClassToTeacher = async (req: Request & { user: IToken }, res: Re
 
 const getTeacher = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
     try {
-        const teacher = await (await Teacher.findById(req.user.id).select("-password -__v -_id -createdAt -updatedAt"))
+        const teacher = await Teacher.findById(req.user.id).select("-password -__v -_id -createdAt -updatedAt")
         res.status(200).json(teacher)
     } catch (error) {
         next(new AppError(error.message, 500))
