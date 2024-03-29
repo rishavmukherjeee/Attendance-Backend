@@ -72,7 +72,7 @@ export const assignSubjectArrayToTeacher = async (req: Request, res: Response, n
         if (!subjects) {
             return next(new AppError("Subjects not found", 404));
         }
-        teacher.subjects = subjects;
+        teacher.subjects = subjects.map(subject => subject._id);
         await teacher.save();
         res.status(200).json({ teacher });
     } catch (error) {
@@ -91,11 +91,10 @@ export const deleteSubjectArrayFromTeacher = async (req: Request, res: Response,
         if (!subjects) {
             return next(new AppError("Subjects not found", 404));
         }
-        teacher.subjects = teacher.subjects.filter((subject) => !subjectIds.includes(subject._id));
+        teacher.subjects = teacher.subjects.map(subject => subject._id).filter((subjectId) => !subjectIds.includes(subjectId));
         await teacher.save();
         res.status(200).json({ teacher });
     } catch (error) {
         next(new AppError(error?.message, 400));
     }
 }
-
