@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Subject, { ISubject } from '../models/subject.model';
 import AppError from '../utils/app-error';
-
+import Teacher from '../models/teacher.model';
 export const createSubject = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const subject: ISubject = new Subject({ ...req?.body });
@@ -60,3 +60,42 @@ export const deleteSubjectById = async (req: Request, res: Response, next: NextF
         next(new AppError(error?.message, 400));
     }
 }
+
+export const assignSubjectArrayToTeacher = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { teacherId, subjectIds } = req?.body;
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return next(new AppError("Teacher not found", 404));
+        }
+        const subjects = await Subject.find({ _id: { $in: subjectIds } });
+        if (!subjects) {
+            return next(new AppError("Subjects not found", 404));
+        }
+        teacher.subjects = subjects;
+        await teacher.save();
+        res.status(200).json({ teacher });
+    } catch (error) {
+        next(new AppError(error?.message, 400));
+    }
+}
+
+export const deleteSubjectArrayFromTeacher = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { teacherId, subjectIds } = req?.body;
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return next(new AppError("Teacher not found", 404));
+        }
+        const subjects = await Subject.find({ _id: { $in: subjectIds } });
+        if (!subjects) {
+            return next(new AppError("Subjects not found", 404));
+        }
+        teacher.subjects = teacher.subjects.filter((subject) => !subjectIds.includes(subject._id));
+        await teacher.save();
+        res.status(200).json({ teacher });
+    } catch (error) {
+        next(new AppError(error?.message, 400));
+    }
+}
+
