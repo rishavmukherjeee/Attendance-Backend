@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import e, { Request, Response, NextFunction } from 'express';
 import Subject, { ISubject } from '../models/subject.model';
 import AppError from '../utils/app-error';
 import Teacher from '../models/teacher.model';
@@ -61,18 +61,16 @@ export const deleteSubjectById = async (req: Request, res: Response, next: NextF
     }
 }
 
-export const assignSubjectArrayToTeacher = async (req: Request, res: Response, next: NextFunction) => {
+export const assignandappendSubjectArrayToTeacher = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { teacherId, subjectIds } = req?.body;
         const teacher = await Teacher.findById(teacherId);
         if (!teacher) {
             return next(new AppError("Teacher not found", 404));
         }
-        const subjects = await Subject.find({ _id: { $in: subjectIds } });
-        if (!subjects) {
-            return next(new AppError("Subjects not found", 404));
-        }
-        teacher.subjects = subjects.map(subject => subject._id);
+        const uniqueSubjects = subjectIds.filter((val: any) => !teacher.subjects.includes(val));
+        teacher.subjects = [...teacher.subjects, ...uniqueSubjects];
+
         await teacher.save();
         res.status(200).json({ teacher });
     } catch (error) {
@@ -80,21 +78,29 @@ export const assignSubjectArrayToTeacher = async (req: Request, res: Response, n
     }
 }
 
+
+
+
 export const deleteSubjectArrayFromTeacher = async (req: Request, res: Response, next: NextFunction) => {
+    
     try {
         const { teacherId, subjectIds } = req?.body;
         const teacher = await Teacher.findById(teacherId);
         if (!teacher) {
             return next(new AppError("Teacher not found", 404));
         }
-        const subjects = await Subject.find({ _id: { $in: subjectIds } });
+        const subjectIdss = subjectIds.map(String);
+        const subjects = await Subject.find({ _id: { $in: subjectIdss } });
         if (!subjects) {
             return next(new AppError("Subjects not found", 404));
         }
-        teacher.subjects = teacher.subjects.map(subject => subject._id).filter((subjectId) => !subjectIds.includes(subjectId));
+       
+        teacher.subjects = teacher.subjects.filter(subject => !subjectIdss.includes(subject.toString()));
+
         await teacher.save();
         res.status(200).json({ teacher });
     } catch (error) {
         next(new AppError(error?.message, 400));
     }
 }
+
