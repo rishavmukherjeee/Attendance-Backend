@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import e, { Request, Response, NextFunction } from 'express';
 import Subject, { ISubject } from '../models/subject.model';
 import AppError from '../utils/app-error';
-
+import Teacher from '../models/teacher.model';
 export const createSubject = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const subject: ISubject = new Subject({ ...req?.body });
@@ -60,3 +60,47 @@ export const deleteSubjectById = async (req: Request, res: Response, next: NextF
         next(new AppError(error?.message, 400));
     }
 }
+
+export const assignandappendSubjectArrayToTeacher = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { teacherId, subjectIds } = req?.body;
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return next(new AppError("Teacher not found", 404));
+        }
+        const uniqueSubjects = subjectIds.filter((val: any) => !teacher.subjects.includes(val));
+        teacher.subjects = [...teacher.subjects, ...uniqueSubjects];
+
+        await teacher.save();
+        res.status(200).json({ teacher });
+    } catch (error) {
+        next(new AppError(error?.message, 400));
+    }
+}
+
+
+
+
+export const deleteSubjectArrayFromTeacher = async (req: Request, res: Response, next: NextFunction) => {
+    
+    try {
+        const { teacherId, subjectIds } = req?.body;
+        const teacher = await Teacher.findById(teacherId);
+        if (!teacher) {
+            return next(new AppError("Teacher not found", 404));
+        }
+        const subjectIdss = subjectIds.map(String);
+        const subjects = await Subject.find({ _id: { $in: subjectIdss } });
+        if (!subjects) {
+            return next(new AppError("Subjects not found", 404));
+        }
+       
+        teacher.subjects = teacher.subjects.filter(subject => !subjectIdss.includes(subject.toString()));
+
+        await teacher.save();
+        res.status(200).json({ teacher });
+    } catch (error) {
+        next(new AppError(error?.message, 400));
+    }
+}
+
