@@ -6,7 +6,7 @@ const router = Router()
 
 router.use([protect, isFaculty])
 router.get("/getReport", generateReport)
-router.get('studentList', getStudentsForAttendance) // require query params section,semester, department(shortName)
+router.get("/studentList", getStudentsForAttendance) // require query params section,semester, department(shortName)
 router.post("/create", createAttendance)
 router.get("/:id", getAttendanceList)
 
