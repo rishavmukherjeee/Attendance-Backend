@@ -83,6 +83,15 @@ const getTeacher = async (req: Request & { user: IToken }, res: Response, next: 
         next(new AppError(error.message, 500))
     }
 }
+const getTeacherById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const teacherId = req.params.id
+        const teacher = await Teacher.findById(teacherId).select("-password -__v -_id -createdAt -updatedAt")
+        res.status(200).json(teacher)
+    } catch (error) {
+        next(new AppError(error.message, 500))
+    }
+}
 const getAllTeacher = async (req: Request & { user: IToken }, res: Response, next: NextFunction) => {
     try {
         const teachers = await Teacher.find().select("-password -__v -createdAt -updatedAt")
@@ -103,4 +112,4 @@ const updateTeacherDetails = async (req: Request & { user: IToken }, res: Respon
     }
 }
 
-export { teacherLogin, teacherRegistration, getTeacher, assignedClassToTeacher, unAssignedClassToTeacher, getAllTeacher }
+export { teacherLogin, teacherRegistration, getTeacher, assignedClassToTeacher, unAssignedClassToTeacher, getAllTeacher, getTeacherById }

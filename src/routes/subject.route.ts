@@ -1,10 +1,15 @@
 import { Router } from 'express';
-import { createSubject, deleteSubjectById, editSubjectById, getAllSubject, getSubjectById,deleteSubjectArrayFromTeacher, assignandappendSubjectArrayToTeacher
+import {
+      createSubject, deleteSubjectById, editSubjectById, getAllSubject, getSubjectById, deleteSubjectArrayFromTeacher, assignandappendSubjectArrayToTeacher, getTeacherSubjects
 
 } from '../controllers/subject.controller';
+import { protect } from '../middlewares/auth.middleware';
 const router = Router();
 
+router.use(protect)
+
 router.get("/", getAllSubject)
+router.get("/getTeacherSubjects", getTeacherSubjects)
 router.post("/addNew", createSubject);
 
 router.put("/delete", deleteSubjectArrayFromTeacher);
