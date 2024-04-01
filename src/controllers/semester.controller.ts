@@ -50,6 +50,10 @@ const updateSemester = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
+const getSemesterByDepartment = () => {
+
+}
+
 const getSemesterById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;

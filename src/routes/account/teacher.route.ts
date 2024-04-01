@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getTeacher, assignedClassToTeacher, teacherLogin, teacherRegistration, unAssignedClassToTeacher, getAllTeacher } from "../../controllers/accounts/teacher.controller";
+import { getTeacher, assignedClassToTeacher, teacherLogin, teacherRegistration, unAssignedClassToTeacher, getAllTeacher, getTeacherById } from "../../controllers/accounts/teacher.controller";
 import { isAdmin, isFaculty, isStudent, protect } from "../../middlewares/auth.middleware";
 
 const router = Router()
@@ -51,6 +51,7 @@ const router = Router()
 
 router.get('/getAll', [protect, isAdmin], getAllTeacher)
 router.get("/me", [protect], getTeacher)
+router.get("/:id", [protect, isAdmin], getTeacherById)
 router.post("/register", teacherRegistration)
 router.post("/login", teacherLogin)
 router.post("/updateClass", [protect, isAdmin], assignedClassToTeacher)
