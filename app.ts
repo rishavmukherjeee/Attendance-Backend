@@ -13,6 +13,7 @@ import subjectRouter from "./src/routes/subject.route"
 import sectionRouter from "./src/routes/section.route"
 import classRouter from "./src/routes/class.route"
 import attendanceRouter from "./src/routes/attendance.route"
+import messageRouter from "./src/routes/account/messages.route"
 import swaggerDefinition from './swagger.json'
 import helmet from "helmet"
 import { rateLimit } from 'express-rate-limit';
@@ -65,7 +66,7 @@ app.use('/api/v2/subject', subjectRouter)
 app.use('/api/v2/section', sectionRouter)
 app.use('/api/v2/class', classRouter)
 app.use('/api/v2/attendance', [limiter], attendanceRouter)
-
+app.use('/api/v2/messages', messageRouter)
 app.get('/', (req, res) => {
     res.send("hello")
 })
