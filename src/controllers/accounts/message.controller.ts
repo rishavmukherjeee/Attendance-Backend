@@ -5,7 +5,7 @@ import AppError from "../../utils/app-error";
   const sendEmail = async (req, res, next) => {
     try {
       const attachmentIds = [];
-  
+      if (attachmentIds.length>0){
       for (let i = 0; i < req.files.length; i++) {
         const newAttachment = new Attachment({
           filename: req.files[i].filename,
@@ -18,8 +18,10 @@ import AppError from "../../utils/app-error";
   
         attachmentIds.push(newAttachment._id);
       }
-  
-      const newEmail = new Email({
+    }
+    var newEmail
+    if (attachmentIds.length>0){
+        newEmail = new Email({
         sender: req.body.sender,
         receiver: req.body.receiver,
         message: req.body.message,
@@ -30,6 +32,20 @@ import AppError from "../../utils/app-error";
         bcc: req.body.bcc,
         attachments: attachmentIds
       });
+    }
+    else{
+        newEmail = new Email({
+        sender: req.body.sender,
+        receiver: req.body.receiver,
+        message: req.body.message,
+        isDelivered: false,
+        isRead: false,
+        isSent: true,
+        cc: req.body.cc,
+        bcc: req.body.bcc,
+        
+      });
+    }
   
       await newEmail.save();
   
