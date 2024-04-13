@@ -3,16 +3,25 @@ import multer from "multer"
 import { sendEmail, updateEmail, getEmails, sendMessages, getMessages,updateMessage } from "../../controllers/accounts/message.controller"
 const router = Router()
 
-const storage = multer.diskStorage({
+const emailStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, 'email/')
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now())
   }
 });
-const upload = multer({ storage: storage });
 
+const messageStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'message/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+const emailUpload = multer({ storage: emailStorage });
+const messageUpload = multer({ storage: messageStorage });
 
 
 router.get("/", (req, res) => {
@@ -23,10 +32,10 @@ router.get("/", (req, res) => {
 
 
 
-router.post('/send-email', upload.array('attachments'), sendEmail);
+router.post('/send-email', emailStorage.array('attachments'), sendEmail);
 router.patch('/update-email/:id', updateEmail);
 router.get('/get-emails/:id', getEmails);
-router.post('/send-messages', upload.array('attachments'), sendMessages);
+router.post('/send-messages', messageStorage.array('attachments'), sendMessages);
 router.patch('/update-message/:id', updateMessage);
 router.get('/get-messages/:id', getMessages);
 
