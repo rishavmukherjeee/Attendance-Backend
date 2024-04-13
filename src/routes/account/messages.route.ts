@@ -33,10 +33,10 @@ router.get("/", (req, res) => {
 
 
 router.post('/send-email', emailStorage.array('attachments'), sendEmail);
-router.patch('/update-email/:id', updateEmail);
+router.put('/update-email/:id', updateEmail);
 router.get('/get-emails/:id', getEmails);
 router.post('/send-messages', messageStorage.array('attachments'), sendMessages);
-router.patch('/update-message/:id', updateMessage);
+router.put('/update-message/:id', updateMessage);
 router.get('/get-messages/:id', getMessages);
 
 
