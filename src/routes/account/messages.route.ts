@@ -1,6 +1,6 @@
 import { Router } from "express"
 import multer from "multer"
-import { sendEmail } from "../../controllers/accounts/message.controller"
+import { sendEmail, updateEmail, getEmails, sendMessages, getMessages,updateMessage } from "../../controllers/accounts/message.controller"
 const router = Router()
 
 const storage = multer.diskStorage({
@@ -13,11 +13,24 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.post('/send-email', upload.array('attachments'), sendEmail);
+
 
 router.get("/", (req, res) => {
   res.send("GET /messages")
 })
+
+
+
+
+
+router.post('/send-email', upload.array('attachments'), sendEmail);
+router.patch('/update-email/:id', updateEmail);
+router.get('/get-emails/:id', getEmails);
+router.post('/send-messages', sendMessages);
+router.patch('/update-message/:id', updateMessage);
+router.get('/get-messages/:id', getMessages);
+
+
 
 
 
