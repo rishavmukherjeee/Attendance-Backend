@@ -5,7 +5,7 @@ const router = Router()
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'emails/')
+    cb(null, 'uploads/')
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now())
@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
 router.post('/send-email', upload.array('attachments'), sendEmail);
 router.patch('/update-email/:id', updateEmail);
 router.get('/get-emails/:id', getEmails);
-router.post('/send-messages', sendMessages);
+router.post('/send-messages', upload.array('attachments'), sendMessages);
 router.patch('/update-message/:id', updateMessage);
 router.get('/get-messages/:id', getMessages);
 
